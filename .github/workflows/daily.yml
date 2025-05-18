@@ -24,15 +24,26 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug environment variables
+        run: |
+          echo "シークレットの状態確認:"
+          echo "TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}"
+          echo "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}"
+          echo "環境変数の存在確認:"
+          env | grep -i TW_BEARER || echo "TW_BEARER not found in env"
+          env | grep -i OPENAI || echo "OPENAI not found in env"
+
       - name: Run daily.js
-        run: node daily.js
+        run: node daily.js tkgshn-private
         env:
           TW_BEARER: ${{ secrets.TW_BEARER }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}
           # secretが正しくセットされているか確認用のログ
           # （セキュリティのため値は表示せず、セットされているかだけ確認）
           CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}
           CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}
+          CHECK_SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT != '' && 'set' || 'not_set' }}
 
       - name: Configure Git
         run: |

@@ -24,6 +24,12 @@ const targetDate = args[1] || null; // 指定がなければ前日の日付を�
 log('スクリプト開始');
 log(`Scrapboxプロジェクト: ${projectName}`);
 
+// 環境変数のデバッグ
+log(`環境変数の状態 - process.env.TW_BEARER: ${process.env.TW_BEARER ? '設定あり' : '設定なし'}`);
+log(`環境変数の状態 - process.env.OPENAI_API_KEY: ${process.env.OPENAI_API_KEY ? '設定あり' : '設定なし'}`);
+log(`環境変数の状態 - process.env.SCRAPBOX_PROJECT: ${process.env.SCRAPBOX_PROJECT || '設定なし'}`);
+log(`環境変数オブジェクト: ${Object.keys(process.env).join(', ')}`);
+
 // 環境変数のチェック
 if (!process.env.TW_BEARER) {
   log('エラー: Twitter APIトークン(TW_BEARER)が設定されていません');
