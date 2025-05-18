@@ -30,13 +30,19 @@ log(`環境変数の状態 - process.env.OPENAI_API_KEY: ${process.env.OPENAI_AP
 log(`環境変数の状態 - process.env.SCRAPBOX_PROJECT: ${process.env.SCRAPBOX_PROJECT || '設定なし'}`);
 log(`環境変数オブジェクト: ${Object.keys(process.env).join(', ')}`);
 
+// 直接環境変数にアクセスしてみる
+const twBearer = process.env['TW_BEARER'];
+const openaiKey = process.env['OPENAI_API_KEY'];
+log(`直接アクセス - TW_BEARER: ${twBearer ? '設定あり' : '設定なし'}`);
+log(`直接アクセス - OPENAI_API_KEY: ${openaiKey ? '設定あり' : '設定なし'}`);
+
 // 環境変数のチェック
-if (!process.env.TW_BEARER) {
+if (!twBearer) {
   log('エラー: Twitter APIトークン(TW_BEARER)が設定されていません');
   process.exit(1);
 }
 
-if (!process.env.OPENAI_API_KEY) {
+if (!openaiKey) {
   log('エラー: OpenAI APIキー(OPENAI_API_KEY)が設定されていません');
   process.exit(1);
 }
@@ -77,7 +83,7 @@ try {
   // 実際のAPIリクエスト
   const tw = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${process.env.TW_BEARER}`
+      'Authorization': `Bearer ${twBearer}`
     }
   }).then(r => r.json());
 
@@ -102,7 +108,7 @@ try {
 
   // OpenAI APIクライアント初期化
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: openaiKey
   });
 
   if (rts.length > 0) {

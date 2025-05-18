@@ -34,7 +34,15 @@ jobs:
           env | grep -i OPENAI || echo "OPENAI not found in env"
 
       - name: Run daily.js
-        run: node daily.js tkgshn-private
+        run: |
+          export TW_BEARER="${{ secrets.TW_BEARER }}"
+          export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
+          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}"
+          echo "環境変数の設定状況:"
+          echo "TW_BEARER設定: ${TW_BEARER:+設定あり}"
+          echo "OPENAI_API_KEY設定: ${OPENAI_API_KEY:+設定あり}"
+          echo "SCRAPBOX_PROJECT: ${SCRAPBOX_PROJECT}"
+          node daily.js tkgshn-private
         env:
           TW_BEARER: ${{ secrets.TW_BEARER }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
