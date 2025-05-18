@@ -64,13 +64,16 @@ jobs:
 
       - name: Commit and push if changes
         run: |
+          git config pull.rebase false  # マージ方式を設定
           git add public/
           # 変更があるかどうか確認
           if [[ -n "$(git status --porcelain)" ]]; then
+            # 最新の変更を取得してからコミット
+            git pull origin main
             # 今日の日付を取得
             TODAY=$(date +"%Y-%m-%d")
             git commit -m "📊 Add tweets data for $TODAY"
-            git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:main
+            git push
           else
             echo "No changes to commit"
           fi
