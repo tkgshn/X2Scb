@@ -1,0 +1,49 @@
+name: Daily Tweets Collector
+
+on:
+  schedule:
+    # UTC 00:00 (JST 09:00) に毎日実行
+    - cron: "0 0 * * *"
+  # 手動実行用
+  workflow_dispatch:
+
+jobs:
+  collect-tweets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run daily.js
+        run: node daily.js
+        env:
+          TW_BEARER: ${{ secrets.TW_BEARER }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push if changes
+        run: |
+          git add public/
+          # 変更があるかどうか確認
+          if [[ -n "$(git status --porcelain)" ]]; then
+            # 今日の日付を取得
+            TODAY=$(date +"%Y-%m-%d")
+            git commit -m "📊 Add tweets data for $TODAY"
+            git push
+          else
+            echo "No changes to commit"
+          fi

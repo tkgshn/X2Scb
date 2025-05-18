@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 69851a2262fa7962e55ab8155830b5a3272f2f65 tkgshn <takagishunsuke1129@gmail.com> 1747552313 +0900	commit (initial): 初期コミット: ベースコードとインフラストラクチャ
+69851a2262fa7962e55ab8155830b5a3272f2f65 6fdf310c9a101834f0cb866ef5f2fc5afa3aeb1a tkgshn <takagishunsuke1129@gmail.com> 1747552537 +0900	commit: 開発環境の改善: CLIツールとnodemonの追加、テスト環境の強化
+6fdf310c9a101834f0cb866ef5f2fc5afa3aeb1a a80f5596c219a958d3b9485551f5bed38c9c1df5 tkgshn <takagishunsuke1129@gmail.com> 1747553071 +0900	commit: セキュリティ強化: 環境変数を使用してAPIキーを管理
+a80f5596c219a958d3b9485551f5bed38c9c1df5 0000000000000000000000000000000000000000 tkgshn <takagishunsuke1129@gmail.com> 1747553079 +0900	Branch: renamed refs/heads/master to refs/heads/main
+0000000000000000000000000000000000000000 a80f5596c219a958d3b9485551f5bed38c9c1df5 tkgshn <takagishunsuke1129@gmail.com> 1747553079 +0900	Branch: renamed refs/heads/master to refs/heads/main
