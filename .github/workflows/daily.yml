@@ -29,6 +29,10 @@ jobs:
         env:
           TW_BEARER: ${{ secrets.TW_BEARER }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # secretが正しくセットされているか確認用のログ
+          # （セキュリティのため値は表示せず、セットされているかだけ確認）
+          CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}
+          CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}
 
       - name: Configure Git
         run: |
