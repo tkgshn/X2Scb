@@ -3,6 +3,7 @@ import dayjs from 'dayjs'; import utc from 'dayjs/plugin/utc.js'; import tz from
 import OpenAI from 'openai';
 import fs from 'fs';
 import 'dotenv/config'; // .env ファイルから環境変数を読み込む
+import { generateImportHTML, generateUserscriptUrl } from './src/backend/scrapbox.js';
 dayjs.extend(utc); dayjs.extend(tz);
 
 // デバッグ用のログ関数
@@ -15,7 +16,13 @@ const log = (msg, obj = null) => {
   }
 };
 
+// コマンドライン引数で日付とScrapboxプロジェクト名を取得
+const args = process.argv.slice(2);
+const projectName = args[0] || process.env.SCRAPBOX_PROJECT || 'tkgshn';
+const targetDate = args[1] || null; // 指定がなければ前日の日付を使用
+
 log('スクリプト開始');
+log(`Scrapboxプロジェクト: ${projectName}`);
 
 // 環境変数のチェック
 if (!process.env.TW_BEARER) {
@@ -28,13 +35,24 @@ if (!process.env.OPENAI_API_KEY) {
   process.exit(1);
 }
 
-const jstYesterday = dayjs().tz('Asia/Tokyo').subtract(1, 'day');
+// 日付の設定
+let jstTargetDate;
+if (targetDate) {
+  // 指定された日付を使用
+  jstTargetDate = dayjs(targetDate).tz('Asia/Tokyo');
+  log(`指定された日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
+} else {
+  // 前日の日付を使用
+  jstTargetDate = dayjs().tz('Asia/Tokyo').subtract(1, 'day');
+  log(`前日の日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
+}
+
 const [startUtc, endUtc] = [
-  jstYesterday.startOf('day').utc().format(),
-  jstYesterday.endOf('day').utc().format()
+  jstTargetDate.startOf('day').utc().format(),
+  jstTargetDate.endOf('day').utc().format()
 ];
 
-log(`対象期間: ${jstYesterday.format('YYYY-MM-DD')} JST (${startUtc} - ${endUtc} UTC)`);
+log(`対象期間: ${jstTargetDate.format('YYYY-MM-DD')} JST (${startUtc} - ${endUtc} UTC)`);
 
 // Twitter APIのURL作成
 const url = new URL('https://api.twitter.com/2/tweets/search/recent');
@@ -136,7 +154,7 @@ try {
 
   // 出力JSONの作成
   const out = {
-    date: jstYesterday.format('YYYY-MM-DD'),
+    date: jstTargetDate.format('YYYY-MM-DD'),
     posts: posts.map(t => ({
       id: t.id,
       text: t.text,
@@ -165,6 +183,26 @@ try {
   const scrapboxPath = `public/${out.date}.txt`;
   await fs.promises.writeFile(scrapboxPath, scrapboxText);
   log(`Scrapboxテキストファイル保存完了: ${scrapboxPath}`);
+
+  // Scrapboxインポート用のHTMLファイルを生成
+  const pageName = `${out.date}のツイートまとめ`;
+  const htmlFilePath = await generateImportHTML(projectName, pageName, scrapboxText);
+  log(`Scrapboxインポート用HTMLファイル生成完了: ${htmlFilePath}`);
+
+  // ユーザースクリプト用のURLを生成
+  const userscriptUrl = generateUserscriptUrl(projectName, out.date);
+  log(`ユーザースクリプト実行用URL: ${userscriptUrl}`);
+
+  // 結果のサマリー表示
+  log('--------------------------------------');
+  log(`処理完了: ${out.date}`);
+  log(`通常ツイート: ${out.posts.length}件`);
+  log(`リツイート: ${out.rts.length}件`);
+  log(`出力ファイル: ${outputPath}`);
+  log(`Scrapboxテキスト: ${scrapboxPath}`);
+  log(`Scrapboxインポート: file://${htmlFilePath}`);
+  log(`ユーザースクリプトURL: ${userscriptUrl}`);
+  log('--------------------------------------');
 
 } catch (error) {
   log(`エラーが発生しました: ${error.message}`);
