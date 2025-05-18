@@ -7,6 +7,10 @@ on:
   # 手動実行用
   workflow_dispatch:
 
+# GitHub Actionsに書き込み権限を付与
+permissions:
+  contents: write
+
 jobs:
   collect-tweets:
     runs-on: ubuntu-latest
@@ -66,7 +70,7 @@ jobs:
             # 今日の日付を取得
             TODAY=$(date +"%Y-%m-%d")
             git commit -m "📊 Add tweets data for $TODAY"
-            git push
+            git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
           else
             echo "No changes to commit"
           fi
