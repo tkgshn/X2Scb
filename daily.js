@@ -1,8 +1,10 @@
-import fetch from 'node-fetch';
-import dayjs from 'dayjs'; import utc from 'dayjs/plugin/utc.js'; import tz from 'dayjs/plugin/timezone.js';
-import OpenAI from 'openai';
-import fs from 'fs';
+import dayjs from 'dayjs';
+import tz from 'dayjs/plugin/timezone.js';
+import utc from 'dayjs/plugin/utc.js';
 import 'dotenv/config'; // .env ファイルから環境変数を読み込む
+import fs from 'fs';
+import fetch from 'node-fetch';
+import OpenAI from 'openai';
 import { generateImportHTML, generateUserscriptUrl } from './src/backend/scrapbox.js';
 dayjs.extend(utc); dayjs.extend(tz);
 
@@ -28,13 +30,16 @@ log(`Scrapboxプロジェクト: ${projectName}`);
 log(`環境変数の状態 - process.env.TW_BEARER: ${process.env.TW_BEARER ? '設定あり' : '設定なし'}`);
 log(`環境変数の状態 - process.env.OPENAI_API_KEY: ${process.env.OPENAI_API_KEY ? '設定あり' : '設定なし'}`);
 log(`環境変数の状態 - process.env.SCRAPBOX_PROJECT: ${process.env.SCRAPBOX_PROJECT || '設定なし'}`);
+log(`環境変数の状態 - process.env.TWITTER_USERNAME: ${process.env.TWITTER_USERNAME || '設定なし'}`);
 log(`環境変数オブジェクト: ${Object.keys(process.env).join(', ')}`);
 
 // 直接環境変数にアクセスしてみる
 const twBearer = process.env['TW_BEARER'];
 const openaiKey = process.env['OPENAI_API_KEY'];
+const twitterUsername = process.env['TWITTER_USERNAME'] || '0xtkgshn';
 log(`直接アクセス - TW_BEARER: ${twBearer ? '設定あり' : '設定なし'}`);
 log(`直接アクセス - OPENAI_API_KEY: ${openaiKey ? '設定あり' : '設定なし'}`);
+log(`直接アクセス - TWITTER_USERNAME: ${twitterUsername}`);
 
 // 環境変数のチェック
 if (!twBearer) {
@@ -55,7 +60,7 @@ if (targetDate) {
   log(`指定された日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
 } else {
   // 前日の日付を使用
-  jstTargetDate = dayjs().tz('Asia/Tokyo').subtract(1, 'day');
+  jstTargetDate = dayjs().tz('Asia/Tokyo').subtract(0, 'day');
   log(`前日の日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
 }
 
@@ -69,7 +74,7 @@ log(`対象期間: ${jstTargetDate.format('YYYY-MM-DD')} JST (${startUtc} - ${en
 // Twitter APIのURL作成
 const url = new URL('https://api.twitter.com/2/tweets/search/recent');
 url.search = new URLSearchParams({
-  'query': 'from:0xtkgshn',
+  'query': `from:${twitterUsername}`,
   'max_results': 100,
   'tweet.fields': 'created_at,edit_history_tweet_ids,referenced_tweets,entities',
   'expansions': 'referenced_tweets.id,author_id,entities.mentions.username'
@@ -231,7 +236,7 @@ function generateScrapboxFormat(data) {
   if (data.posts.length > 0) {
     text += '[** 自分のツイート]\n';
     data.posts.forEach(post => {
-      text += ` [https://twitter.com/0xtkgshn/status/${post.id}]\n`;
+      text += ` [https://twitter.com/${twitterUsername}/status/${post.id}]\n`;
       text += `  ${post.text.replace(/\n/g, '\n  ')}\n\n`;
     });
   }
