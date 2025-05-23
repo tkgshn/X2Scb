@@ -1,0 +1,24 @@
+{
+  "date": "2025-05-23",
+  "posts": [
+    {
+      "id": "1925041952229359689",
+      "text": "Geminiのstudent適用やってみたメモです\nめっちゃ簡単に追加できた\n\nhttps://t.co/9CKAcyA9BK",
+      "created_at": "2025-05-21T04:12:21.000Z"
+    }
+  ],
+  "rts": [
+    {
+      "id": "1925893218442289511",
+      "text": "RT @0xtkgshn: ⏳Scb2GPT: 「Scrapbox の中にGPTを生やすUserScript」を作った.\n\n- 一部の行を選択してそれをGPTに投げられる\n- Web検索もできる\n- API 制限かかって動画を撮ってくれた @inoue2002 は specia…",
+      "orig_text": "⏳Scb2GPT: 「Scrapbox の中にGPTを生やすUserScript」を作った.\n\n- 一部の行を選択してそれをGPTに投げられる\n- Web検索もできる\n- API 制限かかって動画を撮ってくれた @inoue2002 は special thanks\n\nhttps://t.co/ZG2swVDB2w https://t.co/2FVnNLdG38",
+      "summary": "Scb2GPTが「ScrapboxにGPTを追加するUserScript」を作成し、選択した行をGPTに送信できる機能やWeb検索機能を提供しています。動画を撮影した@inoue2002に特別な感謝を"
+    },
+    {
+      "id": "1925547978632437912",
+      "text": "RT @hidetaka_dev: @schroneko Stripeについては、先日発表された Order Intent APIがエージェントによる購入などの実現を目指した機能と言われています。\n以下はカンファレンスでのデモ動画のアーカイブです。\nhttps://t.co/A…",
+      "orig_text": "@schroneko Stripeについては、先日発表された Order Intent APIがエージェントによる購入などの実現を目指した機能と言われています。\n以下はカンファレンスでのデモ動画のアーカイブです。\nhttps://t.co/AyzLbrpmMH",
+      "summary": "Stripeの新しいOrder Intent APIは、エージェントによる購入を可能にする機能を目指しており、カンファレンスでのデモ動画が共有されています。"
+    }
+  ]
+}

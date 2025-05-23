@@ -1,0 +1,26 @@
+[* 2025-05-23 のツイートまとめ]
+
+[** 自分のツイート]
+ [https://twitter.com/inoue2002/status/1925041952229359689]
+  Geminiのstudent適用やってみたメモです
+  めっちゃ簡単に追加できた
+  
+  https://t.co/9CKAcyA9BK
+
+[** リツイート]
+ [https://twitter.com/i/web/status/1925893218442289511]
+  ⏳Scb2GPT: 「Scrapbox の中にGPTを生やすUserScript」を作った.
+  
+  - 一部の行を選択してそれをGPTに投げられる
+  - Web検索もできる
+  - API 制限かかって動画を撮ってくれた @inoue2002 は special thanks
+  
+  https://t.co/ZG2swVDB2w https://t.co/2FVnNLdG38
+  [summary] Scb2GPTが「ScrapboxにGPTを追加するUserScript」を作成し、選択した行をGPTに送信できる機能やWeb検索機能を提供しています。動画を撮影した@inoue2002に特別な感謝を
+
+ [https://twitter.com/i/web/status/1925547978632437912]
+  @schroneko Stripeについては、先日発表された Order Intent APIがエージェントによる購入などの実現を目指した機能と言われています。
+  以下はカンファレンスでのデモ動画のアーカイブです。
+  https://t.co/AyzLbrpmMH
+  [summary] Stripeの新しいOrder Intent APIは、エージェントによる購入を可能にする機能を目指しており、カンファレンスでのデモ動画が共有されています。
+
