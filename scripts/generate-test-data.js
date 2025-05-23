@@ -3,11 +3,15 @@
 /**
  * テスト用のサンプルデータを生成するスクリプト
  */
+import dayjs from 'dayjs';
+import 'dotenv/config'; // 環境変数を読み込む
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dayjs from 'dayjs';
 import { generateScrapboxFormat } from '../src/backend/formatter.js';
+
+// 環境変数からTwitter usernameを取得
+const twitterUsername = process.env.TWITTER_USERNAME || '0xtkgshn';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(__dirname, '../public');
@@ -88,7 +92,7 @@ function simpleScrapboxFormat(data) {
   if (data.posts.length > 0) {
     text += '[** 自分のツイート]\n';
     data.posts.forEach(post => {
-      text += ` [https://twitter.com/0xtkgshn/status/${post.id}]\n`;
+      text += ` [https://twitter.com/${twitterUsername}/status/${post.id}]\n`;
       text += `  ${post.text.replace(/\n/g, '\n  ')}\n\n`;
     });
   }
