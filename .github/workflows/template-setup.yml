@@ -74,6 +74,13 @@ jobs:
           The UserScript has been automatically configured with your GitHub username and repository name.
           You can verify this in: `src/frontend/userscript/scrapbox-twitter-daily.user.js`
 
+          ## 4.1 Install UserScript
+
+          1. Make sure you have [Tampermonkey](https://www.tampermonkey.net/) installed in your browser.
+          2. Click the link below to install the UserScript from your repository:
+             [Install UserScript](https://github.com/$USER_NAME/$REPO_NAME/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
+          3. Tampermonkey will open a new tab showing the script. Click "Install".
+
           ## 5. First Run
 
           After setup, you can manually trigger the daily workflow or wait for the scheduled run.
