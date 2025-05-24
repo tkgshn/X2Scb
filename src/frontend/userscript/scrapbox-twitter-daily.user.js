@@ -12,17 +12,26 @@
 (async function() {
     'use strict';
 
+    // 設定
+    const CONFIG = {
+        // GitHubのユーザー名
+        GITHUB_USERNAME: 'inoue2002',
+        // GitHubのリポジトリ名
+        GITHUB_REPO: 'X2Scb',
+    };
+
     // 関数: DOMが読み込まれるまで待機する
     const waitForScrapboxReady = async () => {
         while (!window.scrapbox || !window.scrapbox.Page || !window.scrapbox.Page.title) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
+        console.log('Scrapboxの準備が完了しました');
         return true;
     };
 
     // 関数: 日付文字列をYYYY-MM-DD形式に変換する
     const formatDateString = (dateStr) => {
-        // 2025/05/18 → 2025-05-17 (前日)
+        // 2025/05/18 または 2025/5/18 → 2025-05-17 (前日)
         const parts = dateStr.split('/');
         if (parts.length !== 3) return null;
 
@@ -35,7 +44,9 @@
     // 関数: URLパラメータから値を取得
     const getUrlParameter = (name) => {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
+        const value = urlParams.get(name);
+        console.log('URLパラメータを取得しました:', name, '=', value);
+        return value;
     };
 
     // 関数: Scrapboxにコンテンツを追加
@@ -95,7 +106,7 @@
         // 指定された日付のデータをインポート
         try {
             // GitHubからデータを取得
-            const dataUrl = `https://tkgshn.github.io/X2Scb/public/${targetDate}.txt`;
+            const dataUrl = `https://${CONFIG.GITHUB_USERNAME}.github.io/${CONFIG.GITHUB_REPO}/public/${targetDate}.txt`;
             const response = await fetch(dataUrl);
 
             if (!response.ok) {
@@ -128,8 +139,8 @@
     // 通常の日付ページ処理
     const pageTitle = window.scrapbox.Page.title;
 
-    // 日付ページの判定: YYYY/MM/DD 形式のページかチェック
-    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(pageTitle)) {
+    // 日付ページの判定: YYYY/MM/DD または YYYY/M/D 形式のページかチェック
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(pageTitle)) {
         console.log('日付ページではありません:', pageTitle);
         return;
     }
@@ -145,7 +156,7 @@
 
     try {
         // GitHub Pagesから前日のデータを取得
-        const dataUrl = `https://tkgshn.github.io/X2Scb/public/${yesterdayDate}.txt`;
+        const dataUrl = `https://${CONFIG.GITHUB_USERNAME}.github.io/${CONFIG.GITHUB_REPO}/public/${yesterdayDate}.txt`;
 
         // データをロードしたか確認するためのフラグを追加
         const importedFlagText = `[twitter-daily-imported:${yesterdayDate}]`;
