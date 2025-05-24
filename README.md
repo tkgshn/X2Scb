@@ -1,120 +1,152 @@
 # 📱 X2Scb - Twitter 連携 Scrapbox 日誌テンプレート
 
-> 🚀 **GitHub テンプレートリポジトリ** - 「Use this template」ボタンをクリックして、あなた専用の Twitter-Scrapbox 連携システムを作成しましょう！
+> 🚀 **GitHub テンプレートリポジトリ** - 「Use this template」ボタンで、あなた専用の Twitter-Scrapbox 連携システムを作成！
 
 [![このテンプレートを使用](https://img.shields.io/badge/このテンプレートを使用-2ea44f?style=for-the-badge)](https://github.com/tkgshn/X2Scb/generate)
+[![GitHub Stars](https://img.shields.io/github/stars/tkgshn/X2Scb?style=social)](https://github.com/tkgshn/X2Scb)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 📖 概要
 
-X2Scb は、あなたの日々のツイートを自動的に収集し、Scrapbox のページへ簡単にインポートできる形式に整形するシステムです。このテンプレートは、以下の機能一式を提供します：
+**X2Scb**（Twitter to Scrapbox）は、あなたの日々のツイートを自動収集し、Scrapbox の日付ページに簡単にインポートできる形式に整形するテンプレートシステムです。
 
-- 🔄 GitHub Actions による**ツイート自動収集**
-- 📋 AI による要約付きの**Scrapbox 互換フォーマット**
-- 🌐 簡単なデータアクセスのための**GitHub Pages デプロイ**
-- 🔧 スムーズな Scrapbox 連携のための**ブラウザユーザースクリプト**
+### ✨ 主な機能
 
-## ✨ 主な機能
+- 🔄 **GitHub Actions 自動収集** - 毎日定時にツイート・RT を自動取得
+- 🤖 **AI 要約機能** - OpenAI 活用でインテリジェントな要約を生成
+- 📋 **Scrapbox 完全対応** - 引用形式・リンク付きで完璧にフォーマット
+- 🌐 **GitHub Pages デプロイ** - JSON や HTML で簡単データアクセス
+- 🔧 **Tampermonkey スクリプト** - ワンクリックで Scrapbox に連携
+- 📱 **テンプレート対応** - 設定自動化で即座に利用開始
 
-- **日次自動化**: GitHub Actions ワークフローがツイートを自動収集
-- **スマート要約**: リツイートや長文コンテンツに対する OpenAI 活用サマリー
-- **複数フォーマット**: JSON、TXT 出力、HTML インポートファイル
-- **簡単連携**: Scrapbox へのワンクリックインポート用ユーザースクリプト
-- **テンプレート対応**: 自動設定によるワンクリックセットアップ
+### 🎯 このテンプレートで得られるもの
 
-## 🚀 クイックスタート
-
-### 1. あなたのリポジトリを作成
-
-1.  上の**「Use this template」**（このテンプレートを使用）ボタンをクリックします。
-2.  新しいリポジトリに名前を付けます（例： `my-twitter-scrapbox`）。
-3.  リポジトリを作成します。
-
-### 2. 自動セットアップ
-
-このテンプレートからリポジトリを作成した後：
-
-1.  **自動セットアップを待ちます** - GitHub Action が自動的に実行され、以下の処理が行われます：
-
-    - 🧹 サンプルデータのクリーンアップ
-    - 📝 あなたのリポジトリ情報でユーザースクリプト設定を更新
-    - 📚 セットアップ手順書（SETUP.md）の作成
-    - 🔧 あなたのリポジトリを使用可能な状態に準備
-
-2.  **SETUP.md ファイルを確認します** - 作成される詳細なセットアップ手順に従ってください。
-
-### 3. 環境設定
-
-セットアッププロセスでは、以下の設定について案内されます：
-
-- 🔑 **API キー**: Twitter Bearer Token と OpenAI API キー
-- 🌐 **GitHub Pages**: データホスティングのための Pages 有効化
-- 🔧 **リポジトリシークレット**: 必要な環境変数の設定
-- 📱 **ユーザースクリプト**: Scrapbox 用ブラウザ拡張機能のインストール
-
-## 📁 提供されるもの
+テンプレート使用後、以下が**自動で**あなた専用にセットアップされます：
 
 ```
-your-repo/
-├── .github/workflows/     # 設定済み自動化ワークフロー
-│   └── daily.yml         # 日次ツイート収集
-├── public/               # 生成データ (Pagesへ自動デプロイ)
-├── src/
-│   ├── backend/          # ツイート処理・整形
-│   └── frontend/         # Scrapbox連携ユーザースクリプト
-├── scripts/              # ユーティリティスクリプト・テストツール
-├── daily.js              # メイン収集スクリプト
-└── SETUP.md              # あなた専用のセットアップガイド
+あなたのリポジトリ/
+├── 🔧 設定済みユーザースクリプト（あなたのGitHubアカウント用）
+├── 📚 あなた専用のREADME・SETUP.md
+├── 🌐 GitHub Pages用ワークフロー
+├── ⚙️ 日次Twitter収集Actions
+└── 🎯 ワンクリックTampermonkeyインストールボタン
 ```
 
-## 🛠️ 仕組み
+## 🚀 クイックスタート（3 分で完了）
 
-### 自動収集
+### 1️⃣ テンプレートからリポジトリ作成
 
-1.  **GitHub Actions** が毎日 日本時間午前 9 時 に実行されます。
-2.  前日のあなたのツイートとリツイートを**取得します**。
-3.  OpenAI を使用してコンテンツを**処理し**、インテリジェントな要約を作成します。
-4.  Scrapbox 互換になるようデータを**整形します**。
-5.  GitHub Pages に自動的に**公開します**。
+**[👆 このテンプレートを使用](https://github.com/tkgshn/X2Scb/generate)** ボタンをクリック
 
-### Scrapbox 連携
+- リポジトリ名: `X2Scb`（推奨）または任意の名前
+- Public/Private: お好みで選択
+- 「Create repository」をクリック
 
-1.  **ユーザースクリプト** が Scrapbox の日付ページを検知します。
-2.  昨日のツイートを**自動的にインポートします**。
-3.  `?date=YYYY-MM-DD` パラメータで**手動インポート**も可能です。
-4.  モーダルプレビュー付きで**コピー＆ペースト**しやすい形式です。
+### 2️⃣ 自動セットアップを待機（約 1 分）
 
-## 🔧 カスタマイズ
+リポジトリ作成後、**GitHub Action が自動実行**されます：
 
-セットアップ後、以下をカスタマイズできます：
+- ✅ サンプルデータのクリーンアップ
+- ✅ あなたの GitHub ユーザー名でスクリプト設定更新
+- ✅ 個人化された README・セットアップガイド生成
+- ✅ Tampermonkey ワンクリックインストールボタン作成
 
-- **スケジュール**: `.github/workflows/daily.yml` の cron 実行タイミングを変更
-- **コンテンツ**: `daily.js` の Twitter クエリパラメータを調整
-- **AI プロンプト**: OpenAI 要約プロンプトをカスタマイズ
-- **ユーザースクリプト**: Scrapbox 連携の動作を変更
-- **フォーマット**: `src/backend/` で出力形式を調整
+> 📋 自動セットアップが開始されない場合：「Actions」タブ → 「テンプレートリポジトリ設定」→「Run workflow」
 
-## 📋 要件
+### 3️⃣ 更新された README に従って設定
 
-- **GitHub アカウント** （無料枠で十分）
-- **Twitter API アクセス** (Bearer Token)
-- **OpenAI API キー** （要約機能用）
-- **Scrapbox アカウント** （連携用）
+自動セットアップ完了後、あなたのリポジトリの**新しい README**に以下が表示されます：
 
-## 🆘 サポート
+- 🎯 **あなた専用の Tampermonkey インストールボタン**
+- 📋 **5 ステップの簡単設定手順**
+- 🔗 **あなたのリポジトリに特化した直接リンク集**
 
-- 📖 **セットアップの問題**: 生成された SETUP.md ファイルを確認してください。
-- 🐛 **バグ**: 元のテンプレートリポジトリに Issue を立ててください。
-- 💡 **機能改善**: フォークして改善提案（プルリクエスト）を歓迎します。
-- 📚 **ドキュメント**: 元のリポジトリの Wiki を参照してください。
+## 🛠️ 設定後の動作フロー
+
+```mermaid
+graph LR
+    A[毎日9時 JST] --> B[GitHub Actions実行]
+    B --> C[前日ツイート取得]
+    C --> D[OpenAI要約生成]
+    D --> E[Scrapbox形式変換]
+    E --> F[GitHub Pages公開]
+    F --> G[Scrapbox日付ページで自動インポート]
+```
+
+## 📱 使用例
+
+### 自動インポート
+
+Scrapbox の日付ページ（例：`2025/01/18`）を開くと、前日のツイートが自動で取得されます。
+
+### 手動インポート
+
+特定の日付を取得したい場合：
+
+```
+https://scrapbox.io/yourproject/2025/01/18?date=2025-01-17
+```
+
+### 生成される Scrapbox 形式
+
+```markdown
+[* 2025/01/17 のツイートまとめ]
+[** 自分のツイート]
+
+> [https://twitter.com/username/status/123456789]
+> 今日はプログラミングについて考えていた
+> [summary.icon] プログラミングの重要性について言及
+
+[** リツイート]
+
+> [https://twitter.com/i/web/status/987654321]
+> 興味深い技術記事を発見
+> [summary.icon] 技術トレンドに関する記事の共有
+```
+
+## 🎨 カスタマイズ可能な要素
+
+- **実行時刻**: `.github/workflows/daily.yml`の cron 設定
+- **AI 要約**: OpenAI プロンプトのカスタマイズ
+- **フォーマット**: Scrapbox 出力形式の調整
+- **クエリ**: Twitter 検索パラメータの変更
+
+## 📋 必要なもの
+
+- 🆓 **GitHub アカウント**（無料プランで十分）
+- 🐦 **Twitter API アクセス**（Bearer Token）
+- 🤖 **OpenAI API キー**（要約機能用、オプション）
+- 📝 **Scrapbox アカウント**
+- 🔧 **Tampermonkey 拡張機能**
+
+## 🆘 サポート・質問
+
+- 📖 **設定で困った場合**: 生成される SETUP.md ファイルを確認
+- 🐛 **バグ報告**: [Issues](https://github.com/tkgshn/X2Scb/issues)を作成
+- 💡 **機能提案**: [Discussions](https://github.com/tkgshn/X2Scb/discussions)で議論
+- 📚 **詳細ドキュメント**: [Wiki](https://github.com/tkgshn/X2Scb/wiki)
+
+## 🤝 コントリビューション
+
+このテンプレートの改善提案やプルリクエストを歓迎します！
+
+1. このリポジトリをフォーク
+2. 機能ブランチを作成（`git checkout -b feature/amazing-feature`）
+3. 変更をコミット（`git commit -m 'Add amazing feature'`）
+4. ブランチにプッシュ（`git push origin feature/amazing-feature`）
+5. プルリクエストを作成
 
 ## 📄 ライセンス
 
-MIT ライセンス - 自由に使用、変更、配布してください！
+MIT ライセンス - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
 
-## 🙏 クレジット
+## 🙏 謝辞
 
-作成者: [@tkgshn](https://github.com/tkgshn) - 元の [X2Scb](https://github.com/tkgshn/X2Scb) プロジェクトを基にしたテンプレートです。
+- **Twitter API** - ツイートデータ取得
+- **OpenAI** - AI 要約機能
+- **Scrapbox** - 知識管理プラットフォーム
+- **GitHub Actions** - 自動化インフラ
 
 ---
 
-> **次のステップ**: このテンプレートを使用した後、リポジトリの SETUP.md ファイルで詳細な設定手順を確認してください！
+> **🚀 今すぐ始める**: 上の「このテンプレートを使用」ボタンをクリックして、あなた専用の Twitter-Scrapbox 連携システムを作成しましょう！
