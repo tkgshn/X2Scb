@@ -42,117 +42,234 @@ jobs:
           sed -i "s/YOUR_REPO_NAME/$REPO_NAME/g" src/frontend/userscript/scrapbox-twitter-daily.user.js
 
           # セットアップガイド (SETUP.md) を生成
-          echo "📝 セットアップガイド (SETUP.md) を作成中..."
-          cat > SETUP.md << 'EOF'
-          # 🔧 初期セットアップが必要です
+          echo "📝 あなた専用のセットアップガイド (SETUP.md) を作成中..."
+          cat > SETUP.md << EOF
+          # 🚀 ${USER_NAME}/${REPO_NAME} セットアップガイド
 
-          ## 1. 環境変数
+          あなた専用のTwitter連携Scrapbox日誌システムの設定を完了させましょう！
 
-          ルートディレクトリに `.env` ファイルを作成し、以下の変数を設定してください：
+          ## 🎯 ステップ1: ユーザースクリプトのインストール
 
-          ```env
-          TWITTER_USERNAME=あなたのTwitterユーザー名
-          TWITTER_BEARER_TOKEN=あなたのTwitter Bearer Token
-          ```
+          **まず最初にこれを完了してください！**
 
-          ## 2. GitHub Pages 設定
+          ### Tampermonkeyのインストール
+          1. ブラウザに [Tampermonkey拡張機能](https://www.tampermonkey.net/) をインストールしてください
+          2. Chrome、Firefox、Safari、Edgeに対応しています
 
-          1. あなたのリポジトリの「Settings」に移動します。
-          2. 「Pages」セクションに移動します。
-          3. ソースとして「GitHub Actions」を選択し、GitHub Pagesを有効にします。
+          ### ユーザースクリプトの1クリックインストール
+          以下のボタンをクリックするだけで完了します：
 
-          ## 3. GitHub Actions シークレット
+          **⬇️ 今すぐインストール ⬇️**
 
-          リポジトリに以下のシークレットを追加してください：
-          - `TW_BEARER`: あなたのTwitter API Bearer Token
-          - `OPENAI_API_KEY`: あなたのOpenAI APIキー（ツイート要約用）
-          - `SCRAPBOX_PROJECT`: あなたのScrapboxプロジェクト名
-          - `TWITTER_USERNAME`: あなたのTwitterユーザー名
+          [![Tampermonkeyにインストール](https://img.shields.io/badge/Tampermonkey-今すぐインストール-00d000?style=for-the-badge&logo=tampermonkey)](https://github.com/${USER_NAME}/${REPO_NAME}/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
 
-          ## 4. 設定の確認
+          ### インストールの確認
+          ボタンをクリックすると：
+          1. 新しいタブでTampermonkeyの画面が開きます
+          2. スクリプトコードが表示されます
+          3. 「Install」または「インストール」ボタンをクリック
+          4. あなたのScrapboxページでツイートインポートが利用可能になります！
 
-          ユーザースクリプトは、あなたのGitHubユーザー名とリポジトリ名で自動的に設定されています。
-          これは `src/frontend/userscript/scrapbox-twitter-daily.user.js` で確認できます。
+          ## 🔑 ステップ2: API設定
 
-          ## 4.1 ユーザースクリプトのインストール
+          ### 2.1 必要なAPIキーを取得
+          - **Twitter API Bearer Token**: [Twitter Developer Portal](https://developer.twitter.com/) から取得
+          - **OpenAI API Key**: [OpenAI Platform](https://platform.openai.com/) から取得
 
-          1. ブラウザに [Tampermonkey](https://www.tampermonkey.net/) がインストールされていることを確認してください。
-          2. 以下のリンクをクリックして、あなたのリポジトリからユーザースクリプトをインストールします：
-             [ユーザースクリプトをインストール](https://github.com/$USER_NAME/$REPO_NAME/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
-          3. Tampermonkeyがスクリプトを表示する新しいタブを開きます。「インストール」をクリックしてください。
+          ### 2.2 環境変数ファイルの作成
+          リポジトリのルートに \`.env\` ファイルを作成：
 
-          ## 5. 初回実行
+          \`\`\`env
+          TWITTER_USERNAME=${USER_NAME}
+          TWITTER_BEARER_TOKEN=あなたのTwitter_Bearer_Token
+          OPENAI_API_KEY=あなたのOpenAI_API_Key
+          SCRAPBOX_PROJECT=あなたのScrapboxプロジェクト名
+          \`\`\`
 
-          セットアップ後、日次ワークフローを手動でトリガーするか、スケジュールされた実行を待つことができます。
+          ## 🌐 ステップ3: GitHub Pages設定
+
+          1. **リポジトリ設定**: [https://github.com/${USER_NAME}/${REPO_NAME}/settings](https://github.com/${USER_NAME}/${REPO_NAME}/settings)
+          2. **「Pages」セクション**に移動
+          3. **Source**: 「GitHub Actions」を選択
+          4. 設定を保存
+
+          これで \`https://${USER_NAME}.github.io/${REPO_NAME}/\` でデータにアクセスできるようになります。
+
+          ## 🔐 ステップ4: GitHub Actionsシークレット
+
+          [リポジトリのシークレット設定](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions) で以下を追加：
+
+          | シークレット名 | 値 |
+          |---|---|
+          | \`TW_BEARER\` | あなたのTwitter API Bearer Token |
+          | \`OPENAI_API_KEY\` | あなたのOpenAI APIキー |
+          | \`SCRAPBOX_PROJECT\` | あなたのScrapboxプロジェクト名 |
+          | \`TWITTER_USERNAME\` | \`${USER_NAME}\` |
+
+          ## 🧪 ステップ5: テスト実行
+
+          ### 手動でワークフローを実行
+          1. [Actions タブ](https://github.com/${USER_NAME}/${REPO_NAME}/actions) に移動
+          2. 「Daily Twitter Collection」ワークフローを選択
+          3. 「Run workflow」をクリック
+          4. 実行完了を待機
+
+          ### 成功の確認
+          - \`public/\` ディレクトリに新しいファイルが生成される
+          - GitHub Pages でデータを確認: [https://${USER_NAME}.github.io/${REPO_NAME}/](https://${USER_NAME}.github.io/${REPO_NAME}/)
+
+          ## 📱 ステップ6: Scrapboxでテスト
+
+          1. **Scrapboxプロジェクト**を開く
+          2. **今日の日付ページ**（例: 2025/01/18）に移動
+          3. **ユーザースクリプト**が自動的に前日のツイートを取得することを確認
+          4. **手動テスト**: URLに \`?date=2025-01-17\` を追加して特定日付のデータを取得
+
+          ## ✅ 設定完了チェックリスト
+
+          - [ ] Tampermonkeyにユーザースクリプトをインストール
+          - [ ] Twitter API Bearer Token を取得・設定
+          - [ ] OpenAI API Key を取得・設定
+          - [ ] GitHub Pages を有効化
+          - [ ] GitHub Actions シークレットを設定
+          - [ ] テストでワークフローを実行
+          - [ ] Scrapbox でデータインポートをテスト
+
+          ## 🔧 自動実行スケジュール
+
+          セットアップ完了後、システムは以下のスケジュールで自動実行されます：
+          - **毎日 9:00 AM (JST)** - 前日のツイートを自動収集
+          - **手動実行** - いつでもActionsタブから手動で実行可能
+
+          ## 🆘 トラブルシューティング
+
+          ### よくある問題
+          - **ワークフローが失敗**: シークレット設定を再確認
+          - **データが表示されない**: GitHub Pages の設定を確認
+          - **ユーザースクリプトが動作しない**: Tampermonkeyの有効化を確認
+
+          ### サポート
+          - 📖 [元テンプレートのWiki](https://github.com/tkgshn/X2Scb/wiki)
+          - 🐛 [Issues](https://github.com/tkgshn/X2Scb/issues)
 
           ---
 
-          **セットアップ完了後、このファイルは削除してください！**
+          ## 🎉 完了後の次のステップ
+
+          1. **このSETUP.mdファイルを削除**（もう必要ありません）
+          2. **README.mdを確認**（あなた専用の情報に更新済み）
+          3. **毎日のツイート収集を楽しむ**！
+
+          **設定完了おめでとうございます！ 🎊**
+
           EOF
 
-      - name: READMEをテンプレート用に更新
+      - name: READMEを個人用に更新
         run: |
-          echo "📚 READMEを更新中..."
-          cat > README.md << 'EOF'
-          # 📱 X2Scb - Twitter連携Scrapbox日誌テンプレート
+          # リポジトリ名とユーザー名を取得
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+          USER_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
 
-          > 🚀 **GitHubテンプレートリポジトリ** - 「Use this template」ボタンをクリックして、あなた専用のTwitter-Scrapbox連携システムを作成しましょう！
+          echo "📚 あなた専用のREADMEを作成中..."
+          cat > README.md << EOF
+          # 📱 ${REPO_NAME} - あなたのTwitter連携Scrapbox日誌
+
+          > ✅ **設定完了済み！** - このリポジトリは ${USER_NAME} さん専用に設定されています。
+
+          ## 🎯 ユーザースクリプトのインストール
+
+          **Scrapbox連携の最初のステップ**: 以下のボタンでTampermonkeyに直接インストールしてください！
+
+          [![Tampermonkeyにインストール](https://img.shields.io/badge/Tampermonkey-インストール-00d000?style=for-the-badge&logo=tampermonkey)](https://github.com/${USER_NAME}/${REPO_NAME}/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
+
+          または、手動でインストール：
+          - [ユーザースクリプトファイル](https://github.com/${USER_NAME}/${REPO_NAME}/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js) を開く
+          - Tampermonkeyで「新しいスクリプト」を選択してコードをコピー＆ペースト
 
           ## 📖 概要
 
-          X2Scbは、あなたの日々のツイートを自動的に収集し、Scrapboxのページへ簡単にインポートできる形式に整形するシステムです。
+          ${REPO_NAME} は、${USER_NAME} さんの日々のツイートを自動的に収集し、Scrapboxのページへ簡単にインポートできる形式に整形するシステムです。
 
-          ## ✨ 主な機能
+          ## ✨ 現在の機能
 
-          - 🔄 GitHub Actionsによる**ツイート自動収集**
-          - 📋 Scrapbox互換の**整形機能**
-          - 🌐 簡単なデータアクセスのための**GitHub Pagesデプロイ**
-          - 🔧 スムーズなScrapbox連携のための**ブラウザユーザースクリプト**
-          - 📊 JSONおよびTXT形式での**データ出力**
+          - 🔄 GitHub Actions による**ツイート自動収集** (毎日9時に実行)
+          - 🤖 OpenAI による**AI要約機能**
+          - 📋 Scrapbox 互換の**整形機能**
+          - 🌐 **GitHub Pages デプロイ** - [https://${USER_NAME}.github.io/${REPO_NAME}/](https://${USER_NAME}.github.io/${REPO_NAME}/)
+          - 🔧 **ブラウザユーザースクリプト** - Scrapbox と完全連携
 
-          ## 🚀 クイックスタート
+          ## 🚀 使い方
 
-          1. **初期セットアップを完了する**: [SETUP.md](SETUP.md) の指示に従ってください。
-          2. **環境を設定する**: Twitter APIの認証情報を設定します。
-          3. **GitHub Pagesを有効にする**: リポジトリ設定でPagesを設定します。
-          4. **ユーザースクリプトをインストールする**: Scrapbox連携のためにブラウザスクリプトを追加します。
+          ### 1. ユーザースクリプトをインストール済み？
+          上の緑色の「Tampermonkeyにインストール」ボタンをクリックして、Scrapbox連携を有効にしてください。
+
+          ### 2. 自動収集（設定後）
+          - 毎日 9:00 AM (JST) に GitHub Actions が自動実行
+          - 前日のツイートとリツイートを取得・処理
+          - AI による要約を生成
+          - GitHub Pages に自動公開
+
+          ### 3. Scrapbox への手動インポート
+          ユーザースクリプトが有効な状態で：
+          - **自動**: 日付ページ（YYYY/MM/DD形式）で前日のツイートを自動取得
+          - **手動**: \`?date=YYYY-MM-DD\` パラメータで特定日付のデータを取得
+
+          ## 🔧 設定状況
+
+          - ✅ **ユーザースクリプト**: ${USER_NAME}/${REPO_NAME} 用に設定済み
+          - 🔄 **GitHub Actions**: 日次実行ワークフロー準備完了
+          - 📁 **公開データ**: [https://${USER_NAME}.github.io/${REPO_NAME}/public/](https://${USER_NAME}.github.io/${REPO_NAME}/public/)
+
+          ## 📋 次のステップ
+
+          **[SETUP.md](SETUP.md) ファイルを確認してください** - 以下の設定が必要です：
+
+          1. 🔑 **API 設定**: Twitter Bearer Token、OpenAI API Key
+          2. 🌐 **GitHub Pages**: リポジトリ設定でPages を有効化
+          3. 🔐 **シークレット**: リポジトリのシークレットに API キーを追加
+          4. 🧪 **テスト実行**: 手動で Actions を実行して動作確認
 
           ## 📁 ディレクトリ構造
 
-          ```
-          ├── .github/workflows/     # GitHub Actions ワークフロー
-          ├── public/               # 生成されたツイートデータ (GitHub Pages用)
+          \`\`\`
+          ${REPO_NAME}/
+          ├── .github/workflows/     # 設定済み自動化ワークフロー
+          │   └── daily.yml         # 毎日9時実行
+          ├── public/               # 生成データ (GitHub Pages)
           ├── src/
-          │   ├── backend/          # データ処理スクリプト
-          │   └── frontend/         # Scrapbox用ユーザースクリプト
-          ├── scripts/              # ユーティリティスクリプト
-          └── daily.js              # メイン収集スクリプト
-          ```
+          │   ├── backend/          # ツイート処理・整形
+          │   └── frontend/         # ${USER_NAME} 専用ユーザースクリプト
+          ├── scripts/              # ユーティリティ
+          ├── daily.js              # メイン収集処理
+          └── SETUP.md              # あなた専用のセットアップガイド
+          \`\`\`
 
-          ## 🛠️ 使い方
+          ## 🛠️ データアクセス
 
-          ### 自動収集
-          GitHub Actions ワークフローが毎日実行され、以下の処理を行います:
-          1. 前日のツイートを取得
-          2. Scrapbox用に整形
-          3. GitHub Pagesに公開
+          生成されたデータは以下からアクセスできます：
 
-          ### 手動インポート
-          Scrapboxでユーザースクリプトを使用し、以下を実行します:
-          - 日付ページに昨日のツイートを自動インポート
-          - `?date=YYYY-MM-DD` パラメータで特定の日付を手動インポート
+          - **JSON**: \`https://${USER_NAME}.github.io/${REPO_NAME}/public/YYYY-MM-DD.json\`
+          - **TXT**: \`https://${USER_NAME}.github.io/${REPO_NAME}/public/YYYY-MM-DD.txt\`
+          - **HTML**: \`https://${USER_NAME}.github.io/${REPO_NAME}/public/YYYY-MM-DD.html\`
 
-          ## 🔧 設定
+          ## 📚 リンク
 
-          詳細な設定手順については [SETUP.md](SETUP.md) を参照してください。
+          - 🏠 **あなたのデータ**: [https://${USER_NAME}.github.io/${REPO_NAME}/](https://${USER_NAME}.github.io/${REPO_NAME}/)
+          - 📖 **セットアップガイド**: [SETUP.md](SETUP.md)
+          - 🔧 **ユーザースクリプト**: [scrapbox-twitter-daily.user.js](src/frontend/userscript/scrapbox-twitter-daily.user.js)
+          - 🔄 **Actions 履歴**: [Actions タブ](https://github.com/${USER_NAME}/${REPO_NAME}/actions)
 
           ## 📄 ライセンス
 
-          MITライセンス - 自由に使用、変更してください！
+          MIT ライセンス - 自由に使用、変更してください！
 
-          ## 🤝 コントリビューション
+          ## 🙏 元テンプレート
 
-          Issueやプルリクエストを歓迎します！
+          このリポジトリは [@tkgshn](https://github.com/tkgshn) の [X2Scb](https://github.com/tkgshn/X2Scb) テンプレートから作成されました。
+
+          ---
+
+          > **🚀 今すぐ開始**: [SETUP.md](SETUP.md) の手順に従って、API設定を完了させましょう！
           EOF
 
       - name: 変更をコミット
