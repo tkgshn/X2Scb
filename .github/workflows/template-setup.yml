@@ -276,7 +276,7 @@ jobs:
 
           - ✅ **ユーザースクリプト**: ${USER_NAME}/${REPO_NAME} 用に設定済み
           - 🔄 **GitHub Actions**: 日次実行ワークフロー準備完了
-          - 📁 **公開データ**: [https://${USER_NAME}.github.io/${REPO_NAME}/public/](https://${USER_NAME}.github.io/${REPO_NAME}/public/)
+          - 📁 **公開データ**: [https://uithub.com/${USER_NAME}/${REPO_NAME}/tree/main/public](https://uithub.com/${USER_NAME}/${REPO_NAME}/tree/main/public)
 
           ## 📋 次のステップ
 
@@ -320,7 +320,7 @@ jobs:
 
           ## 📚 リンク
 
-          - 🏠 **あなたのデータ**: [https://${USER_NAME}.github.io/${REPO_NAME}/](https://${USER_NAME}.github.io/${REPO_NAME}/)
+          - 🏠 **あなたのデータ**: [https://uithub.com/${USER_NAME}/${REPO_NAME}/tree/main/public](https://uithub.com/${USER_NAME}/${REPO_NAME}/tree/main/public)
           - 📖 **セットアップガイド**: [SETUP.md](SETUP.md)
           - 🔧 **ユーザースクリプト**: [scrapbox-twitter-daily.user.js](src/frontend/userscript/scrapbox-twitter-daily.user.js)
           - 🔄 **Actions 履歴**: [Actions タブ](https://github.com/${USER_NAME}/${REPO_NAME}/actions)
