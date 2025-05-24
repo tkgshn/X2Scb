@@ -240,9 +240,20 @@ function generateScrapboxFormat(data) {
   if (data.rts.length > 0) {
     text += '[** リツイート]\n';
     data.rts.forEach(rt => {
-      text += ` [https://twitter.com/i/web/status/${rt.id}]\n`;
-      text += `  ${rt.orig_text.replace(/\n/g, '\n  ')}\n`;
-      text += `  [summary] ${rt.summary}\n\n`;
+      // ユーザー名をURLから抽出する試み
+      let username = 'ParrotMystery'; // デフォルトのユーザー名
+
+      // ツイートでメンションされているユーザー名を抽出できる場合
+      if (rt.text && rt.text.startsWith('RT @')) {
+        const matches = rt.text.match(/^RT @([^:]+):/);
+        if (matches && matches[1]) {
+          username = matches[1];
+        }
+      }
+
+      // 新しいフォーマット
+      text += ` >[https://x.com/${username}/status/${rt.id} @${username}]: ${rt.orig_text.replace(/\n/g, '\n >')}\n`;
+      text += `  [ChatGPT.icon]${rt.summary}\n\n`;
     });
   }
 

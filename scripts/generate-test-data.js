@@ -12,7 +12,8 @@ import { generateScrapboxFormat } from '../src/backend/formatter.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(__dirname, '../public');
 
-const today = dayjs().format('YYYY-MM-DD');
+// 特定の日付を指定
+const today = '2025-05-18'; // dayjs().format('YYYY-MM-DD');
 
 // サンプルデータの作成
 const sampleData = {
@@ -97,9 +98,20 @@ function simpleScrapboxFormat(data) {
   if (data.rts.length > 0) {
     text += '[** リツイート]\n';
     data.rts.forEach(rt => {
-      text += ` [https://twitter.com/i/web/status/${rt.id}]\n`;
-      text += `  ${rt.orig_text.replace(/\n/g, '\n  ')}\n`;
-      text += `  [summary] ${rt.summary}\n\n`;
+      // ユーザー名をURLから抽出する試み
+      let username = 'ParrotMystery'; // デフォルトのユーザー名
+
+      // ツイートでメンションされているユーザー名を抽出できる場合
+      if (rt.text && rt.text.startsWith('RT @')) {
+        const matches = rt.text.match(/^RT @([^:]+):/);
+        if (matches && matches[1]) {
+          username = matches[1];
+        }
+      }
+
+      // 新しいフォーマット
+      text += ` >[https://x.com/${username}/status/${rt.id} @${username}]: ${rt.orig_text.replace(/\n/g, '\n >')}\n`;
+      text += `  [ChatGPT.icon]${rt.summary}\n\n`;
     });
   }
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X2Scb テスト</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .result {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0055aa;
+    }
+  </style>
+</head>
+<body>
+  <h1>X2Scb テスト</h1>
+
+  <h2>テキストファイルの内容</h2>
+  <button id="loadBtn">ファイルを読み込む</button>
+  <div id="content" class="result">
+    <p>[ファイルの内容がここに表示されます]</p>
+  </div>
+
+  <h2>Scrapboxでのプレビュー</h2>
+  <p>以下のURLにアクセスして、ユーザースクリプトが正しく動作するか確認できます：</p>
+  <p><a href="https://scrapbox.io/tkgshn/?date=2025-05-18" target="_blank">https://scrapbox.io/tkgshn/?date=2025-05-18</a></p>
+
+  <h2>使い方</h2>
+  <ol>
+    <li>「ファイルを読み込む」ボタンをクリックして、テキストファイルの内容を確認</li>
+    <li>上記のScrapbox URLをクリックして、実際の動作を確認</li>
+  </ol>
+
+  <script>
+    document.getElementById('loadBtn').addEventListener('click', async function() {
+      try {
+        const response = await fetch('2025-05-18.txt');
+        if (!response.ok) {
+          throw new Error('ファイルの読み込みに失敗しました');
+        }
+        const text = await response.text();
+        document.getElementById('content').innerHTML = `<pre>${text}</pre>`;
+      } catch (error) {
+        document.getElementById('content').innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

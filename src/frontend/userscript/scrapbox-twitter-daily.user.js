@@ -95,7 +95,9 @@
         // 指定された日付のデータをインポート
         try {
             // GitHubからデータを取得
-            const dataUrl = `https://tkgshn.github.io/X2Scb/public/${targetDate}.txt`;
+            // const dataUrl = `https://tkgshn.github.io/X2Scb/public/${targetDate}.txt`;
+            // テスト用にローカルサーバーからデータを取得
+            const dataUrl = `http://localhost:3000/${targetDate}.txt`;
             const response = await fetch(dataUrl);
 
             if (!response.ok) {
@@ -145,7 +147,9 @@
 
     try {
         // GitHub Pagesから前日のデータを取得
-        const dataUrl = `https://tkgshn.github.io/X2Scb/public/${yesterdayDate}.txt`;
+        // const dataUrl = `https://tkgshn.github.io/X2Scb/public/${yesterdayDate}.txt`;
+        // テスト用にローカルサーバーからデータを取得
+        const dataUrl = `http://localhost:3000/${yesterdayDate}.txt`;
 
         // データをロードしたか確認するためのフラグを追加
         const importedFlagText = `[twitter-daily-imported:${yesterdayDate}]`;
