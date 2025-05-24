@@ -60,7 +60,7 @@ if (targetDate) {
   log(`指定された日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
 } else {
   // 前日の日付を使用
-  jstTargetDate = dayjs().tz('Asia/Tokyo').subtract(0, 'day');
+  jstTargetDate = dayjs().tz('Asia/Tokyo').subtract(1, 'day');
   log(`前日の日付: ${jstTargetDate.format('YYYY-MM-DD')}`);
 }
 
