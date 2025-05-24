@@ -2,7 +2,7 @@ name: Daily Tweets Collector
 
 on:
   schedule:
-    # UTC 00:00 (JST 09:00) に毎日実行
+    # UTC 21:00 (JST 06:00) に毎日実行
     - cron: "0 0 * * *"
   # 手動実行用
   workflow_dispatch:
