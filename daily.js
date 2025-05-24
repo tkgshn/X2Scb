@@ -145,7 +145,7 @@ try {
       }
 
       log(`元ツイートの内容: "${origText}"`);
-      const prompt = `以下のツイートを日本語で1-2文に要約してください:\n"${origText}"`;
+      const prompt = `以下のツイートを日本語でなるべく詳しく要約してください:\n"${origText}"`;
 
       try {
         log('OpenAI APIリクエスト開始');
