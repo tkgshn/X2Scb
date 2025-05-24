@@ -1,10 +1,15 @@
 name: Daily Tweets Collector
 
+# ⚠️ テンプレート使用者へ: 必要に応じて以下を調整してください
+# 1. cronスケジュール（現在はUTC 00:00 = JST 09:00）
+# 2. GitHub Secrets の設定
+# 3. Scrapboxプロジェクト名の設定
+
 on:
   schedule:
-    # UTC 00:00 (JST 09:00) に毎日実行
+    # UTC 00:00 (JST 09:00) に毎日実行 - タイムゾーンに合わせて調整してください
     - cron: "0 0 * * *"
-  # 手動実行用
+  # 手動実行用（テスト時に便利）
   workflow_dispatch:
 
 # GitHub Actionsに書き込み権限を付与
@@ -41,21 +46,26 @@ jobs:
         run: |
           export TW_BEARER="${{ secrets.TW_BEARER }}"
           export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
-          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}"
+          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }}"
+          export TWITTER_USERNAME="${{ secrets.TWITTER_USERNAME || 'your-username' }}"
           echo "環境変数の設定状況:"
           echo "TW_BEARER設定: ${TW_BEARER:+設定あり}"
           echo "OPENAI_API_KEY設定: ${OPENAI_API_KEY:+設定あり}"
           echo "SCRAPBOX_PROJECT: ${SCRAPBOX_PROJECT}"
-          node daily.js tkgshn-private
+          echo "TWITTER_USERNAME: ${TWITTER_USERNAME}"
+          # SCRAPBOX_PROJECTをdaily.jsに渡す（テンプレート使用者は変更してください）
+          node daily.js ${SCRAPBOX_PROJECT}
         env:
           TW_BEARER: ${{ secrets.TW_BEARER }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}
+          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }}
+          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME || 'your-username' }}
           # secretが正しくセットされているか確認用のログ
           # （セキュリティのため値は表示せず、セットされているかだけ確認）
           CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}
           CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}
           CHECK_SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT != '' && 'set' || 'not_set' }}
+          CHECK_TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME != '' && 'set' || 'not_set' }}
 
       - name: Configure Git
         run: |

@@ -1,0 +1,191 @@
+name: Template Repository Setup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    # このワークフローはテンプレートリポジトリでのみ実行されるべきなので
+    # 特定の条件でスキップできるようにする
+    if: github.repository != 'tkgshn/X2Scb'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup repository for template use
+        run: |
+          echo "🚀 Setting up repository from template..."
+
+          # publicディレクトリ内の既存のツイートデータを削除
+          echo "🧹 Cleaning up sample data..."
+          find public -name "*.json" -delete
+          find public -name "*.txt" -delete
+          find public -name "*.html" -delete
+
+          # .gitkeepファイルを作成してpublicディレクトリを保持
+          touch public/.gitkeep
+
+          # リポジトリ名とユーザー名を取得
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+          USER_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+
+          echo "📝 Updating UserScript configuration..."
+          # UserScriptの設定を動的に更新
+          sed -i "s/YOUR_GITHUB_USERNAME/$USER_NAME/g" src/frontend/userscript/scrapbox-twitter-daily.user.js
+          sed -i "s/YOUR_REPO_NAME/$REPO_NAME/g" src/frontend/userscript/scrapbox-twitter-daily.user.js
+
+          # サンプルの.envファイルを作成
+          echo "📝 Creating environment setup files..."
+          cat > SETUP.md << 'EOF'
+          # 🔧 Initial Setup Required
+
+          ## 1. Environment Variables
+
+          Create a `.env` file in the root directory with the following variables:
+
+          ```env
+          TWITTER_USERNAME=your_twitter_username
+          TWITTER_BEARER_TOKEN=your_twitter_bearer_token
+          ```
+
+          ## 2. GitHub Pages Setup
+
+          1. Go to your repository settings
+          2. Navigate to "Pages" section
+          3. Enable GitHub Pages with source "GitHub Actions"
+
+          ## 3. GitHub Actions Secrets
+
+          Add the following secrets to your repository:
+          - `TW_BEARER`: Your Twitter API Bearer Token
+          - `OPENAI_API_KEY`: Your OpenAI API Key (for tweet summaries)
+          - `SCRAPBOX_PROJECT`: Your Scrapbox project name
+          - `TWITTER_USERNAME`: Your Twitter username
+
+          ## 4. Customize Configuration
+
+          The UserScript has been automatically configured with your GitHub username and repository name.
+          You can verify this in: `src/frontend/userscript/scrapbox-twitter-daily.user.js`
+
+          ## 5. First Run
+
+          After setup, you can manually trigger the daily workflow or wait for the scheduled run.
+
+          ---
+
+          **Delete this file after completing the setup!**
+          EOF
+
+      - name: Update README for template use
+        run: |
+          echo "📚 Updating README..."
+          cat > README.md << 'EOF'
+          # 📱 X2Scb - Twitter to Scrapbox Integration
+
+          > 🚀 **This repository was created from a template. Please see [SETUP.md](SETUP.md) for initial configuration!**
+
+          ## 📖 Overview
+
+          X2Scb automatically collects your daily tweets and formats them for easy import into Scrapbox pages.
+
+          ## ✨ Features
+
+          - 🔄 **Automated Collection**: Daily GitHub Actions workflow collects your tweets
+          - 📋 **Scrapbox Format**: Converts tweets to Scrapbox-compatible format
+          - 🌐 **GitHub Pages**: Hosts formatted data for easy access
+          - 🔧 **UserScript**: Browser extension for seamless Scrapbox integration
+          - 📊 **Multiple Formats**: JSON and TXT output formats
+
+          ## 🚀 Quick Start
+
+          1. **Complete Initial Setup**: Follow instructions in [SETUP.md](SETUP.md)
+          2. **Configure Environment**: Set up your Twitter API credentials
+          3. **Enable GitHub Pages**: Configure Pages in repository settings
+          4. **Install UserScript**: Add the browser script for Scrapbox integration
+
+          ## 📁 Directory Structure
+
+          ```
+          ├── .github/workflows/     # GitHub Actions workflows
+          ├── public/               # Generated tweet data (GitHub Pages)
+          ├── src/
+          │   ├── backend/          # Data processing scripts
+          │   └── frontend/         # UserScript for Scrapbox
+          ├── scripts/              # Utility scripts
+          └── daily.js              # Main collection script
+          ```
+
+          ## 🛠️ Usage
+
+          ### Automatic Collection
+          The GitHub Actions workflow runs daily and:
+          1. Fetches your previous day's tweets
+          2. Formats them for Scrapbox
+          3. Publishes to GitHub Pages
+
+          ### Manual Import
+          Use the UserScript in Scrapbox to:
+          - Automatically import yesterday's tweets to date pages
+          - Manually import specific dates with `?date=YYYY-MM-DD` parameter
+
+          ## 🔧 Configuration
+
+          See [SETUP.md](SETUP.md) for detailed configuration instructions.
+
+          ## 📄 License
+
+          MIT License - feel free to use and modify!
+
+          ## 🤝 Contributing
+
+          Issues and pull requests are welcome!
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "🎉 Initialize repository from template
+
+          - Clean up sample data from public directory
+          - Add setup instructions (SETUP.md)
+          - Update README for template usage
+          - Update UserScript configuration automatically
+          - Prepare for initial configuration" || exit 0
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
+      - name: Remove template setup workflow
+        run: |
+          echo "🗑️ Removing template setup workflow..."
+          git rm .github/workflows/template-setup.yml
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "🧹 Remove template setup workflow after initialization"
+
+      - name: Push cleanup
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
+      - name: Setup complete
+        run: |
+          echo "✅ Template setup complete!"
+          echo "📋 Next steps:"
+          echo "1. Check the SETUP.md file for configuration instructions"
+          echo "2. Set up your environment variables"
+          echo "3. Configure GitHub Pages"
+          echo "4. Add your Twitter API credentials to repository secrets"

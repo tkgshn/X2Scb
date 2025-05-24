@@ -12,11 +12,11 @@
 (async function() {
     'use strict';
 
-    // 設定
+    // 設定 - テンプレート使用時はここを変更してください
     const CONFIG = {
-        // GitHubのユーザー名
-        GITHUB_USERNAME: 'inoue2002',
-        // GitHubのリポジトリ名
+        // GitHubのユーザー名 (あなたのGitHubユーザー名に変更)
+        GITHUB_USERNAME: 'YOUR_GITHUB_USERNAME',
+        // GitHubのリポジトリ名 (作成したリポジトリ名に変更)
         GITHUB_REPO: 'X2Scb',
     };
 
@@ -80,7 +80,7 @@
             console.log('addContentToPage開始');
             console.log('ページ行数:', unsafeWindow.scrapbox.Page.lines.length);
             console.log('編集中かどうか:', unsafeWindow.scrapbox.Page.editing);
-            
+
             if (unsafeWindow.scrapbox.Page.lines.length <= 1) {
                 // ページが空の場合（タイトルのみ）
                 console.log('空ページとして処理');
@@ -168,20 +168,20 @@
                 unsafeWindow.scrapbox.Page.edit();
                 return true;
             }
-            
+
             // 方法2: startEdit()メソッドを試す
             if (typeof unsafeWindow.scrapbox.Page.startEdit === 'function') {
                 unsafeWindow.scrapbox.Page.startEdit();
                 return true;
             }
-            
+
             // 方法3: DOM操作で編集可能な領域をクリック
             const editableArea = document.querySelector('.page-content, .editor, .line');
             if (editableArea && typeof editableArea.click === 'function') {
                 editableArea.click();
                 return true;
             }
-            
+
             console.warn('編集モードの開始に失敗しました');
             return false;
         } catch (error) {
@@ -269,7 +269,7 @@
                 await navigator.clipboard.writeText(content);
                 copyButton.textContent = 'コピー完了!';
                 copyButton.style.background = '#28a745';
-                
+
                 // コピー完了後の処理
                 setTimeout(() => {
                     modal.remove(); // モーダルを閉じる
@@ -277,14 +277,14 @@
                         onCopyCallback(); // コールバックを実行
                     }
                 }, 1000);
-                
+
             } catch (err) {
                 // フォールバック：テキストエリアを選択してコピー
                 dataArea.select();
                 document.execCommand('copy');
                 copyButton.textContent = 'コピー完了!';
                 copyButton.style.background = '#28a745';
-                
+
                 // コピー完了後の処理
                 setTimeout(() => {
                     modal.remove(); // モーダルを閉じる
@@ -359,7 +359,7 @@
     const formatTweetData = (rawData, dateString) => {
         try {
             let tweetData;
-            
+
             // rawDataがオブジェクトかどうかをチェック
             if (typeof rawData === 'object' && rawData !== null) {
                 // 既にJSONオブジェクトの場合
@@ -380,12 +380,12 @@
             // 自分のツイート section (posts)
             if (tweetData.posts && tweetData.posts.length > 0) {
                 formattedContent += `[** 自分のツイート!]\n`;
-                
+
                 tweetData.posts.forEach(post => {
                     // URLをIDから生成
                     const tweetUrl = `https://twitter.com/inoue2002/status/${post.id}`;
                     formattedContent += `>[${tweetUrl}]\n`;
-                    
+
                     // ツイート内容を引用形式で追加（空行はスキップ）
                     const tweetLines = post.text.split('\n');
                     tweetLines.forEach(line => {
@@ -393,12 +393,12 @@
                             formattedContent += `>${line}\n`;
                         }
                     });
-                    
+
                     // サマリーがある場合
                     if (post.summary) {
                         formattedContent += ` [summary.icon] ${post.summary}\n`;
                     }
-                    
+
                     formattedContent += '\n'; // ツイート間の空行
                 });
             }
@@ -406,12 +406,12 @@
             // リツイート section (rts)
             if (tweetData.rts && tweetData.rts.length > 0) {
                 formattedContent += `[** リツイート]\n`;
-                
+
                 tweetData.rts.forEach(rt => {
                     // URLをIDから生成（リツイートの場合は/i/web/statusを使用）
                     const retweetUrl = `https://twitter.com/i/web/status/${rt.id}`;
                     formattedContent += `>[${retweetUrl}]\n`;
-                    
+
                     // リツイート内容（orig_textがあればそれを、なければtextを使用）
                     const retweetText = rt.orig_text || rt.text;
                     const retweetLines = retweetText.split('\n');
@@ -420,12 +420,12 @@
                             formattedContent += `>${line}\n`;
                         }
                     });
-                    
+
                     // サマリーがある場合
                     if (rt.summary) {
                         formattedContent += ` [summary.icon] ${rt.summary}\n`;
                     }
-                    
+
                     formattedContent += '\n'; // リツイート間の空行
                 });
             }
@@ -446,13 +446,13 @@
     const dateParam = getUrlParameter('date');
     if (dateParam) {
         const targetDate = dateParam;
-        
+
         // 既にページに該当データが存在するかチェック
         if (isDataAlreadyExists(targetDate)) {
             showNotification(`${targetDate} のデータは既にこのページに存在します。`, 'info');
             return;
         }
-        
+
         const targetPageTitle = `${targetDate.replace(/-/g, '/')}のツイートまとめ`;
 
         // 指定された日付のデータをインポート
@@ -477,16 +477,16 @@
 
             // 現在のページにデータを追加
             const tweetContent = await response.json();
-            
+
             // データをScrapbox形式にフォーマット
             const formattedContent = formatTweetData(tweetContent, targetDate);
-            
+
             // モーダルでデータを表示（コピー可能）
             showDataModal(`${targetDate} のツイートデータ1`, formattedContent, () => {
                 // コピー完了時の通知
                 showNotification(`${targetDate} のデータをコピーしました！`, 'success');
             });
-            
+
             showNotification(`${targetDate} のツイートデータを取得しました！モーダルからコピーできます。`);
 
         } catch (error) {
@@ -548,18 +548,18 @@
             }
             return;
         }
-        
+
         const tweetContent = await response.json();
 
         // データをScrapbox形式にフォーマット
         const formattedContent = formatTweetData(tweetContent, yesterdayDate);
-        
+
         // モーダルでデータを表示（コピー可能）
         showDataModal(`${yesterdayDate} のツイートデータ`, formattedContent, () => {
             // コピー完了時の通知
             showNotification(`${yesterdayDate} のデータをコピーしました！`, 'success');
         });
-        
+
         showNotification(`${yesterdayDate} のツイートデータを取得しました！モーダルからコピーできます。`);
 
     } catch (error) {
