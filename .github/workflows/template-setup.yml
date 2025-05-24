@@ -95,16 +95,52 @@ jobs:
 
           これで \`https://${USER_NAME}.github.io/${REPO_NAME}/\` でデータにアクセスできるようになります。
 
-          ## 🔐 ステップ4: GitHub Actionsシークレット
+          ## 🔐 ステップ4: GitHub Actionsシークレット設定
 
-          [リポジトリのシークレット設定](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions) で以下を追加：
+          **重要**: GitHub Actions がツイート収集を実行するために、以下のAPIキーをリポジトリシークレットに設定する必要があります。
 
-          | シークレット名 | 値 |
-          |---|---|
-          | \`TW_BEARER\` | あなたのTwitter API Bearer Token |
-          | \`OPENAI_API_KEY\` | あなたのOpenAI APIキー |
-          | \`SCRAPBOX_PROJECT\` | あなたのScrapboxプロジェクト名 |
-          | \`TWITTER_USERNAME\` | \`${USER_NAME}\` |
+          ### 4.1 シークレット設定画面にアクセス
+          こちらから直接アクセスできます：
+          **[📋 シークレット設定画面を開く](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions/new)**
+
+          ### 4.2 必要なシークレット一覧
+
+          以下の **4つのシークレット** を1つずつ追加してください：
+
+          #### 1️⃣ TW_BEARER
+          - **Name**: \`TW_BEARER\`
+          - **Secret**: あなたの Twitter API Bearer Token
+          - **取得方法**: [Twitter Developer Portal](https://developer.twitter.com/) → プロジェクト → Keys and tokens → Bearer Token
+
+          #### 2️⃣ OPENAI_API_KEY
+          - **Name**: \`OPENAI_API_KEY\`
+          - **Secret**: あなたの OpenAI API キー
+          - **取得方法**: [OpenAI Platform](https://platform.openai.com/api-keys) → Create new secret key
+
+          #### 3️⃣ SCRAPBOX_PROJECT
+          - **Name**: \`SCRAPBOX_PROJECT\`
+          - **Secret**: あなたのScrapboxプロジェクト名
+          - **例**: \`${USER_NAME}\` (通常はGitHubユーザー名と同じ)
+
+          #### 4️⃣ TWITTER_USERNAME
+          - **Name**: \`TWITTER_USERNAME\`
+          - **Secret**: \`${USER_NAME}\`
+          - **説明**: あなたのTwitterユーザー名（@マークは不要）
+
+          ### 4.3 設定手順の詳細
+
+          1. **[シークレット設定画面](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions/new)** を開く
+          2. 「New repository secret」をクリック
+          3. 上記の **Name** と **Secret** をそれぞれ入力
+          4. 「Add secret」をクリック
+          5. **4つ全て**のシークレットについて手順2-4を繰り返す
+
+          ### 4.4 設定確認
+          全て設定すると、[シークレット一覧](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions) に以下が表示されます：
+          - ✅ TW_BEARER
+          - ✅ OPENAI_API_KEY
+          - ✅ SCRAPBOX_PROJECT
+          - ✅ TWITTER_USERNAME
 
           ## 🧪 ステップ5: テスト実行
 
@@ -127,13 +163,17 @@ jobs:
 
           ## ✅ 設定完了チェックリスト
 
-          - [ ] Tampermonkeyにユーザースクリプトをインストール
-          - [ ] Twitter API Bearer Token を取得・設定
-          - [ ] OpenAI API Key を取得・設定
-          - [ ] GitHub Pages を有効化
-          - [ ] GitHub Actions シークレットを設定
-          - [ ] テストでワークフローを実行
-          - [ ] Scrapbox でデータインポートをテスト
+          - [ ] **Tampermonkey** にユーザースクリプトをインストール
+          - [ ] **Twitter API Bearer Token** を取得
+          - [ ] **OpenAI API Key** を取得
+          - [ ] **GitHub Pages** を有効化
+          - [ ] **GitHub Actions シークレット** を全て設定:
+            - [ ] \`TW_BEARER\` を追加
+            - [ ] \`OPENAI_API_KEY\` を追加
+            - [ ] \`SCRAPBOX_PROJECT\` を追加
+            - [ ] \`TWITTER_USERNAME\` を追加
+          - [ ] **テスト実行** でワークフローを手動実行
+          - [ ] **Scrapbox** でデータインポートをテスト
 
           ## 🔧 自動実行スケジュール
 
@@ -224,10 +264,18 @@ jobs:
 
           **[SETUP.md](SETUP.md) ファイルを確認してください** - 以下の設定が必要です：
 
-          1. 🔑 **API 設定**: Twitter Bearer Token、OpenAI API Key
+          1. 🔑 **API 設定**: Twitter Bearer Token、OpenAI API Key を取得
           2. 🌐 **GitHub Pages**: リポジトリ設定でPages を有効化
-          3. 🔐 **シークレット**: リポジトリのシークレットに API キーを追加
+          3. 🔐 **シークレット設定**: [📋 こちら](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions/new) で以下を追加
+             - \`TW_BEARER\` = あなたのTwitter API Bearer Token
+             - \`OPENAI_API_KEY\` = あなたのOpenAI API キー
+             - \`SCRAPBOX_PROJECT\` = \`${USER_NAME}\` (あなたのScrapboxプロジェクト名)
+             - \`TWITTER_USERNAME\` = \`${USER_NAME}\` (あなたのTwitterユーザー名)
           4. 🧪 **テスト実行**: 手動で Actions を実行して動作確認
+
+          ### 🚨 重要: API設定が最優先です
+
+          まず **[シークレット設定](https://github.com/${USER_NAME}/${REPO_NAME}/settings/secrets/actions/new)** を完了してください。設定しないとワークフローがエラーになります。
 
           ## 📁 ディレクトリ構造
 
