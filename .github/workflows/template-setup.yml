@@ -1,4 +1,4 @@
-name: Template Repository Setup
+name: テンプレートリポジトリ設定
 
 on:
   push:
@@ -9,190 +9,190 @@ jobs:
   setup:
     runs-on: ubuntu-latest
 
-    # このワークフローはテンプレートリポジトリでのみ実行されるべきなので
-    # 特定の条件でスキップできるようにする
+    # このワークフローは、元のテンプレートリポジトリでは実行されません。
+    # "Use this template" で作成された新しいリポジトリでのみ実行されます。
     if: github.repository != 'tkgshn/X2Scb'
 
     steps:
-      - name: Checkout repository
+      - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup repository for template use
+      - name: テンプレート使用のためにリポジトリをセットアップ
         run: |
-          echo "🚀 Setting up repository from template..."
+          echo "🚀 テンプレートからリポジトリをセットアップ中です..."
 
           # publicディレクトリ内の既存のツイートデータを削除
-          echo "🧹 Cleaning up sample data..."
+          echo "🧹 サンプルデータをクリーンアップ中..."
           find public -name "*.json" -delete
           find public -name "*.txt" -delete
           find public -name "*.html" -delete
 
-          # .gitkeepファイルを作成してpublicディレクトリを保持
+          # .gitkeepファイルを作成してpublicディレクトリを保持 (空のディレクトリをGit管理するため)
           touch public/.gitkeep
 
-          # リポジトリ名とユーザー名を取得
+          # リポジトリ名とユーザー名を環境変数から取得
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
           USER_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
 
-          echo "📝 Updating UserScript configuration..."
-          # UserScriptの設定を動的に更新
+          echo "📝 ユーザースクリプトの設定を更新中..."
+          # UserScriptの設定を動的に更新 (GitHubユーザー名とリポジトリ名を置換)
           sed -i "s/YOUR_GITHUB_USERNAME/$USER_NAME/g" src/frontend/userscript/scrapbox-twitter-daily.user.js
           sed -i "s/YOUR_REPO_NAME/$REPO_NAME/g" src/frontend/userscript/scrapbox-twitter-daily.user.js
 
-          # サンプルの.envファイルを作成
-          echo "📝 Creating environment setup files..."
+          # セットアップガイド (SETUP.md) を生成
+          echo "📝 セットアップガイド (SETUP.md) を作成中..."
           cat > SETUP.md << 'EOF'
-          # 🔧 Initial Setup Required
+          # 🔧 初期セットアップが必要です
 
-          ## 1. Environment Variables
+          ## 1. 環境変数
 
-          Create a `.env` file in the root directory with the following variables:
+          ルートディレクトリに `.env` ファイルを作成し、以下の変数を設定してください：
 
           ```env
-          TWITTER_USERNAME=your_twitter_username
-          TWITTER_BEARER_TOKEN=your_twitter_bearer_token
+          TWITTER_USERNAME=あなたのTwitterユーザー名
+          TWITTER_BEARER_TOKEN=あなたのTwitter Bearer Token
           ```
 
-          ## 2. GitHub Pages Setup
+          ## 2. GitHub Pages 設定
 
-          1. Go to your repository settings
-          2. Navigate to "Pages" section
-          3. Enable GitHub Pages with source "GitHub Actions"
+          1. あなたのリポジトリの「Settings」に移動します。
+          2. 「Pages」セクションに移動します。
+          3. ソースとして「GitHub Actions」を選択し、GitHub Pagesを有効にします。
 
-          ## 3. GitHub Actions Secrets
+          ## 3. GitHub Actions シークレット
 
-          Add the following secrets to your repository:
-          - `TW_BEARER`: Your Twitter API Bearer Token
-          - `OPENAI_API_KEY`: Your OpenAI API Key (for tweet summaries)
-          - `SCRAPBOX_PROJECT`: Your Scrapbox project name
-          - `TWITTER_USERNAME`: Your Twitter username
+          リポジトリに以下のシークレットを追加してください：
+          - `TW_BEARER`: あなたのTwitter API Bearer Token
+          - `OPENAI_API_KEY`: あなたのOpenAI APIキー（ツイート要約用）
+          - `SCRAPBOX_PROJECT`: あなたのScrapboxプロジェクト名
+          - `TWITTER_USERNAME`: あなたのTwitterユーザー名
 
-          ## 4. Customize Configuration
+          ## 4. 設定の確認
 
-          The UserScript has been automatically configured with your GitHub username and repository name.
-          You can verify this in: `src/frontend/userscript/scrapbox-twitter-daily.user.js`
+          ユーザースクリプトは、あなたのGitHubユーザー名とリポジトリ名で自動的に設定されています。
+          これは `src/frontend/userscript/scrapbox-twitter-daily.user.js` で確認できます。
 
-          ## 4.1 Install UserScript
+          ## 4.1 ユーザースクリプトのインストール
 
-          1. Make sure you have [Tampermonkey](https://www.tampermonkey.net/) installed in your browser.
-          2. Click the link below to install the UserScript from your repository:
-             [Install UserScript](https://github.com/$USER_NAME/$REPO_NAME/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
-          3. Tampermonkey will open a new tab showing the script. Click "Install".
+          1. ブラウザに [Tampermonkey](https://www.tampermonkey.net/) がインストールされていることを確認してください。
+          2. 以下のリンクをクリックして、あなたのリポジトリからユーザースクリプトをインストールします：
+             [ユーザースクリプトをインストール](https://github.com/$USER_NAME/$REPO_NAME/raw/main/src/frontend/userscript/scrapbox-twitter-daily.user.js)
+          3. Tampermonkeyがスクリプトを表示する新しいタブを開きます。「インストール」をクリックしてください。
 
-          ## 5. First Run
+          ## 5. 初回実行
 
-          After setup, you can manually trigger the daily workflow or wait for the scheduled run.
+          セットアップ後、日次ワークフローを手動でトリガーするか、スケジュールされた実行を待つことができます。
 
           ---
 
-          **Delete this file after completing the setup!**
+          **セットアップ完了後、このファイルは削除してください！**
           EOF
 
-      - name: Update README for template use
+      - name: READMEをテンプレート用に更新
         run: |
-          echo "📚 Updating README..."
+          echo "📚 READMEを更新中..."
           cat > README.md << 'EOF'
-          # 📱 X2Scb - Twitter to Scrapbox Integration
+          # 📱 X2Scb - Twitter連携Scrapbox日誌テンプレート
 
-          > 🚀 **This repository was created from a template. Please see [SETUP.md](SETUP.md) for initial configuration!**
+          > 🚀 **GitHubテンプレートリポジトリ** - 「Use this template」ボタンをクリックして、あなた専用のTwitter-Scrapbox連携システムを作成しましょう！
 
-          ## 📖 Overview
+          ## 📖 概要
 
-          X2Scb automatically collects your daily tweets and formats them for easy import into Scrapbox pages.
+          X2Scbは、あなたの日々のツイートを自動的に収集し、Scrapboxのページへ簡単にインポートできる形式に整形するシステムです。
 
-          ## ✨ Features
+          ## ✨ 主な機能
 
-          - 🔄 **Automated Collection**: Daily GitHub Actions workflow collects your tweets
-          - 📋 **Scrapbox Format**: Converts tweets to Scrapbox-compatible format
-          - 🌐 **GitHub Pages**: Hosts formatted data for easy access
-          - 🔧 **UserScript**: Browser extension for seamless Scrapbox integration
-          - 📊 **Multiple Formats**: JSON and TXT output formats
+          - 🔄 GitHub Actionsによる**ツイート自動収集**
+          - 📋 Scrapbox互換の**整形機能**
+          - 🌐 簡単なデータアクセスのための**GitHub Pagesデプロイ**
+          - 🔧 スムーズなScrapbox連携のための**ブラウザユーザースクリプト**
+          - 📊 JSONおよびTXT形式での**データ出力**
 
-          ## 🚀 Quick Start
+          ## 🚀 クイックスタート
 
-          1. **Complete Initial Setup**: Follow instructions in [SETUP.md](SETUP.md)
-          2. **Configure Environment**: Set up your Twitter API credentials
-          3. **Enable GitHub Pages**: Configure Pages in repository settings
-          4. **Install UserScript**: Add the browser script for Scrapbox integration
+          1. **初期セットアップを完了する**: [SETUP.md](SETUP.md) の指示に従ってください。
+          2. **環境を設定する**: Twitter APIの認証情報を設定します。
+          3. **GitHub Pagesを有効にする**: リポジトリ設定でPagesを設定します。
+          4. **ユーザースクリプトをインストールする**: Scrapbox連携のためにブラウザスクリプトを追加します。
 
-          ## 📁 Directory Structure
+          ## 📁 ディレクトリ構造
 
           ```
-          ├── .github/workflows/     # GitHub Actions workflows
-          ├── public/               # Generated tweet data (GitHub Pages)
+          ├── .github/workflows/     # GitHub Actions ワークフロー
+          ├── public/               # 生成されたツイートデータ (GitHub Pages用)
           ├── src/
-          │   ├── backend/          # Data processing scripts
-          │   └── frontend/         # UserScript for Scrapbox
-          ├── scripts/              # Utility scripts
-          └── daily.js              # Main collection script
+          │   ├── backend/          # データ処理スクリプト
+          │   └── frontend/         # Scrapbox用ユーザースクリプト
+          ├── scripts/              # ユーティリティスクリプト
+          └── daily.js              # メイン収集スクリプト
           ```
 
-          ## 🛠️ Usage
+          ## 🛠️ 使い方
 
-          ### Automatic Collection
-          The GitHub Actions workflow runs daily and:
-          1. Fetches your previous day's tweets
-          2. Formats them for Scrapbox
-          3. Publishes to GitHub Pages
+          ### 自動収集
+          GitHub Actions ワークフローが毎日実行され、以下の処理を行います:
+          1. 前日のツイートを取得
+          2. Scrapbox用に整形
+          3. GitHub Pagesに公開
 
-          ### Manual Import
-          Use the UserScript in Scrapbox to:
-          - Automatically import yesterday's tweets to date pages
-          - Manually import specific dates with `?date=YYYY-MM-DD` parameter
+          ### 手動インポート
+          Scrapboxでユーザースクリプトを使用し、以下を実行します:
+          - 日付ページに昨日のツイートを自動インポート
+          - `?date=YYYY-MM-DD` パラメータで特定の日付を手動インポート
 
-          ## 🔧 Configuration
+          ## 🔧 設定
 
-          See [SETUP.md](SETUP.md) for detailed configuration instructions.
+          詳細な設定手順については [SETUP.md](SETUP.md) を参照してください。
 
-          ## 📄 License
+          ## 📄 ライセンス
 
-          MIT License - feel free to use and modify!
+          MITライセンス - 自由に使用、変更してください！
 
-          ## 🤝 Contributing
+          ## 🤝 コントリビューション
 
-          Issues and pull requests are welcome!
+          Issueやプルリクエストを歓迎します！
           EOF
 
-      - name: Commit changes
+      - name: 変更をコミット
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "🎉 Initialize repository from template
+          git commit -m "🎉 テンプレートからリポジトリを初期化
 
-          - Clean up sample data from public directory
-          - Add setup instructions (SETUP.md)
-          - Update README for template usage
-          - Update UserScript configuration automatically
-          - Prepare for initial configuration" || exit 0
+          - publicディレクトリからサンプルデータをクリーンアップ
+          - セットアップ手順 (SETUP.md) を追加
+          - テンプレート使用のためにREADMEを更新
+          - ユーザースクリプト設定を自動更新
+          - 初期設定の準備完了" || exit 0
 
-      - name: Push changes
+      - name: 変更をプッシュ
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      - name: Remove template setup workflow
+      - name: テンプレート設定ワークフローを削除
         run: |
-          echo "🗑️ Removing template setup workflow..."
+          echo "🗑️ テンプレート設定ワークフローを削除中..."
           git rm .github/workflows/template-setup.yml
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "🧹 Remove template setup workflow after initialization"
+          git commit -m "🧹 初期化後にテンプレート設定ワークフローを削除"
 
-      - name: Push cleanup
+      - name: クリーンアップをプッシュ
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      - name: Setup complete
+      - name: セットアップ完了
         run: |
-          echo "✅ Template setup complete!"
-          echo "📋 Next steps:"
-          echo "1. Check the SETUP.md file for configuration instructions"
-          echo "2. Set up your environment variables"
-          echo "3. Configure GitHub Pages"
-          echo "4. Add your Twitter API credentials to repository secrets"
+          echo "✅ テンプレートのセットアップが完了しました！"
+          echo "📋 次のステップ:"
+          echo "1. 設定手順については SETUP.md ファイルを確認してください。"
+          echo "2. 環境変数を設定してください。"
+          echo "3. GitHub Pagesを設定してください。"
+          echo "4. Twitter APIの認証情報をリポジトリのシークレットに追加してください。"

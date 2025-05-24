@@ -1,13 +1,13 @@
-name: Daily Tweets Collector
+name: 日次ツイート収集
 
 # ⚠️ テンプレート使用者へ: 必要に応じて以下を調整してください
 # 1. cronスケジュール（現在はUTC 00:00 = JST 09:00）
-# 2. GitHub Secrets の設定
+# 2. GitHub シークレット の設定
 # 3. Scrapboxプロジェクト名の設定
 
 on:
   schedule:
-    # UTC 00:00 (JST 09:00) に毎日実行 - タイムゾーンに合わせて調整してください
+    # 毎日UTC午前0時（日本時間午前9時）に実行 - 必要に応じてタイムゾーンを調整してください
     - cron: "0 0 * * *"
   # 手動実行用（テスト時に便利）
   workflow_dispatch:
@@ -21,58 +21,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: リポジトリをチェックアウト
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Node.js をセットアップ
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "npm"
 
-      - name: Install dependencies
+      - name: 依存関係をインストール
         run: npm install
 
-      - name: Debug environment variables
+      - name: 環境変数をデバッグ
         run: |
           echo "シークレットの状態確認:"
-          echo "TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}"
-          echo "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}"
+          echo "TW_BEARER: ${{ secrets.TW_BEARER != '' && '設定済み' || '未設定' }}"
+          echo "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && '設定済み' || '未設定' }}"
           echo "環境変数の存在確認:"
-          env | grep -i TW_BEARER || echo "TW_BEARER not found in env"
-          env | grep -i OPENAI || echo "OPENAI not found in env"
+          env | grep -i TW_BEARER || echo "TW_BEARER はenv内に見つかりません"
+          env | grep -i OPENAI || echo "OPENAI はenv内に見つかりません"
 
-      - name: Run daily.js
+      - name: daily.js を実行
         run: |
           export TW_BEARER="${{ secrets.TW_BEARER }}"
           export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
-          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }}"
-          export TWITTER_USERNAME="${{ secrets.TWITTER_USERNAME || 'your-username' }}"
+          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }}" # あなたのScrapboxプロジェクト名に置き換えてください
+          export TWITTER_USERNAME="${{ secrets.TWITTER_USERNAME || 'your-username' }}" # あなたのTwitterユーザー名に置き換えてください
           echo "環境変数の設定状況:"
           echo "TW_BEARER設定: ${TW_BEARER:+設定あり}"
           echo "OPENAI_API_KEY設定: ${OPENAI_API_KEY:+設定あり}"
           echo "SCRAPBOX_PROJECT: ${SCRAPBOX_PROJECT}"
           echo "TWITTER_USERNAME: ${TWITTER_USERNAME}"
-          # SCRAPBOX_PROJECTをdaily.jsに渡す（テンプレート使用者は変更してください）
+          # SCRAPBOX_PROJECTをdaily.jsに渡します（テンプレート使用者は変更してください）
           node daily.js ${SCRAPBOX_PROJECT}
         env:
           TW_BEARER: ${{ secrets.TW_BEARER }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }}
-          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME || 'your-username' }}
-          # secretが正しくセットされているか確認用のログ
-          # （セキュリティのため値は表示せず、セットされているかだけ確認）
-          CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}
-          CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}
-          CHECK_SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT != '' && 'set' || 'not_set' }}
-          CHECK_TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME != '' && 'set' || 'not_set' }}
+          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'your-scrapbox-project' }} # あなたのScrapboxプロジェクト名に置き換えてください
+          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME || 'your-username' }} # あなたのTwitterユーザー名に置き換えてください
+          # シークレットが正しく設定されているか確認用のログ
+          # （セキュリティのため値は表示せず、設定されているかのみ確認）
+          CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && '設定済み' || '未設定' }}
+          CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && '設定済み' || '未設定' }}
+          CHECK_SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT != '' && '設定済み' || '未設定' }}
+          CHECK_TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME != '' && '設定済み' || '未設定' }}
 
-      - name: Configure Git
+      - name: Gitを設定
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit and push if changes
+      - name: 変更があればコミットしてプッシュ
         run: |
           git config pull.rebase false  # マージ方式を設定
           git add public/
@@ -82,8 +82,8 @@ jobs:
             git pull origin main
             # 今日の日付を取得
             TODAY=$(date +"%Y-%m-%d")
-            git commit -m "📊 Add tweets data for $TODAY"
+            git commit -m "📊 $TODAY のツイートデータを追加"
             git push
           else
-            echo "No changes to commit"
+            echo "コミットする変更はありません"
           fi
