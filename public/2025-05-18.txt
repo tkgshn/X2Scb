@@ -1,21 +1,2 @@
 [* 2025-05-18 のツイートまとめ]
 
-[** 自分のツイート]
- [https://twitter.com/0xtkgshn/status/1111111111111111111]
-  これはサンプルツイートです。#テスト
-
- [https://twitter.com/0xtkgshn/status/1111111111111111112]
-  今日もScrapboxで作業中。とても便利です。
-
- [https://twitter.com/0xtkgshn/status/1111111111111111113]
-  Node.jsでスクリプトを書いています。
-  これはマルチラインツイートのサンプル
-  です。
-
-[** リツイート]
- >[https://x.com/techuser/status/2222222222222222222 @techuser]: JavaScriptの新機能が発表されました！とても興味深いです。
-  [ChatGPT.icon]JavaScriptの新機能が発表されたことについての言及。
-
- >[https://x.com/newsaccount/status/2222222222222222223 @newsaccount]: 今日の技術ニュース: AIの最新動向について詳しく解説します。人間の仕事はどう変わるのか？
-  [ChatGPT.icon]AIの最新動向と人間の仕事への影響について述べたニュース。
-

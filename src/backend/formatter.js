@@ -1,7 +1,11 @@
 /**
  * データのフォーマットと保存に関するモジュール
  */
+import 'dotenv/config'; // 環境変数を読み込む
 import fs from 'fs';
+
+// 環境変数からTwitter usernameを取得
+const twitterUsername = process.env.TWITTER_USERNAME || '0xtkgshn';
 
 /**
  * ツイートデータをJSON形式に整形する
@@ -42,7 +46,7 @@ export function generateScrapboxFormat(data) {
   if (data.posts && data.posts.length > 0) {
     text += '[** 自分のツイート]\n';
     data.posts.forEach(post => {
-      text += ` [https://twitter.com/0xtkgshn/status/${post.id}]\n`;
+      text += ` [https://twitter.com/${twitterUsername}/status/${post.id}]\n`;
       text += `  ${post.text.replace(/\n/g, '\n  ')}\n\n`;
     });
   }
@@ -118,7 +122,7 @@ export function generateMarkdownFormat(data) {
   if (data.posts && data.posts.length > 0) {
     text += '## 自分のツイート\n\n';
     data.posts.forEach(post => {
-      text += `- [ツイートリンク](https://twitter.com/0xtkgshn/status/${post.id})\n`;
+      text += `- [ツイートリンク](https://twitter.com/${twitterUsername}/status/${post.id})\n`;
       text += `  ${post.text.replace(/\n/g, '\n  ')}\n\n`;
     });
   }
