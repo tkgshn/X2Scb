@@ -25,12 +25,20 @@ jobs:
 
           # publicディレクトリ内の既存のツイートデータを削除
           echo "🧹 サンプルデータをクリーンアップ中..."
-          find public -name "*.json" -delete
-          find public -name "*.txt" -delete
-          find public -name "*.html" -delete
+          if [ -d "public" ]; then
+            echo "📁 publicディレクトリが存在します - サンプルファイルを削除中..."
+            find public -name "*.json" -delete 2>/dev/null || true
+            find public -name "*.txt" -delete 2>/dev/null || true
+            find public -name "*.html" -delete 2>/dev/null || true
+            echo "✅ サンプルファイルの削除完了"
+          else
+            echo "📁 publicディレクトリが存在しません - 新規作成します..."
+            mkdir -p public
+          fi
 
           # .gitkeepファイルを作成してpublicディレクトリを保持 (空のディレクトリをGit管理するため)
           touch public/.gitkeep
+          echo "📝 public/.gitkeep ファイルを作成しました"
 
           # リポジトリ名とユーザー名を環境変数から取得
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
