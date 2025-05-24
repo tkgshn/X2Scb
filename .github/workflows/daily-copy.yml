@@ -1,0 +1,79 @@
+name: Daily Tweets Collector2
+
+on:
+  schedule:
+    # UTC 21:00 (JST 06:00) に毎日実行
+    - cron: "0 0 * * *"
+  # 手動実行用
+  workflow_dispatch:
+
+# GitHub Actionsに書き込み権限を付与
+permissions:
+  contents: write
+
+jobs:
+  collect-tweets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Debug environment variables
+        run: |
+          echo "シークレットの状態確認:"
+          echo "TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}"
+          echo "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}"
+          echo "環境変数の存在確認:"
+          env | grep -i TW_BEARER || echo "TW_BEARER not found in env"
+          env | grep -i OPENAI || echo "OPENAI not found in env"
+
+      - name: Run daily.js
+        run: |
+          export TW_BEARER="${{ secrets.TW_BEARER }}"
+          export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
+          export SCRAPBOX_PROJECT="${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}"
+          echo "環境変数の設定状況:"
+          echo "TW_BEARER設定: ${TW_BEARER:+設定あり}"
+          echo "OPENAI_API_KEY設定: ${OPENAI_API_KEY:+設定あり}"
+          echo "SCRAPBOX_PROJECT: ${SCRAPBOX_PROJECT}"
+          node daily.js tkgshn-private
+        env:
+          TW_BEARER: ${{ secrets.TW_BEARER }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT || 'tkgshn-private' }}
+          # secretが正しくセットされているか確認用のログ
+          # （セキュリティのため値は表示せず、セットされているかだけ確認）
+          CHECK_TW_BEARER: ${{ secrets.TW_BEARER != '' && 'set' || 'not_set' }}
+          CHECK_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY != '' && 'set' || 'not_set' }}
+          CHECK_SCRAPBOX_PROJECT: ${{ secrets.SCRAPBOX_PROJECT != '' && 'set' || 'not_set' }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push if changes
+        run: |
+          git config pull.rebase false  # マージ方式を設定
+          git add public/
+          # 変更があるかどうか確認
+          if [[ -n "$(git status --porcelain)" ]]; then
+            # 最新の変更を取得してからコミット
+            git pull origin main
+            # 今日の日付を取得
+            TODAY=$(date +"%Y-%m-%d")
+            git commit -m "📊 Add tweets data for $TODAY"
+            git push
+          else
+            echo "No changes to commit"
+          fi
