@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrapbox Import: 2025-05-30のツイートまとめ</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .buttons {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4285f4;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    .help {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scrapbox インポート：2025-05-30のツイートまとめ</h1>
+  <div class="buttons">
+    <button id="copyBtn">コンテンツをコピー</button>
+    <button id="openScrapbox">Scrapboxを開く</button>
+  </div>
+  <p>以下のテキストをコピーして、Scrapboxの新規ページに貼り付けてください：</p>
+  <pre id="content">[* 2025-05-30 のツイートまとめ]
+
+</pre>
+
+  <div class="help">
+    <h3>使い方</h3>
+    <ol>
+      <li>「コンテンツをコピー」ボタンをクリックしてテキストをコピー</li>
+      <li>「Scrapboxを開く」ボタンをクリックしてyour-scrapbox-projectプロジェクトを開く</li>
+      <li>新規ページを作成し、コピーしたテキストを貼り付け</li>
+    </ol>
+  </div>
+
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const content = document.getElementById('content');
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(content);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy');
+      selection.removeAllRanges();
+      alert('コンテンツをコピーしました！');
+    });
+
+    document.getElementById('openScrapbox').addEventListener('click', function() {
+      window.open('https://scrapbox.io/your-scrapbox-project', '_blank');
+    });
+  </script>
+</body>
+</html>
+  
